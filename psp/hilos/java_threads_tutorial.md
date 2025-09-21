@@ -15,6 +15,13 @@
 
 ## 1. Configuración del Proyecto Maven
 
+Maven es una herramienta de gestión y construcción de proyectos que automatiza el proceso de compilación, gestión de dependencias y empaquetado. Para un proyecto de concurrencia en Java, nos ayuda a:
+- **Gestionar Dependencias**: Incluir librerías como JUnit para pruebas o SLF4J para logging de forma sencilla.
+- **Estandarizar el Proyecto**: Mantiene una estructura de directorios coherente.
+- **Configurar el Compilador**: Permite especificar la versión de Java (en este caso, 21) y habilitar características como las `preview features`.
+
+A continuación, se muestra un `pom.xml` básico para nuestro proyecto.
+
 ### pom.xml
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -74,6 +81,31 @@
 ---
 
 ## 2. Fundamentos de Hilos en Java
+### Conceptos Fundamentales
+
+#### ¿Qué es un hilo?
+Un **hilo (thread)** es la unidad más pequeña de ejecución dentro de un proceso. En Java, los hilos permiten que un programa realice múltiples tareas simultáneamente, aprovechando mejor los recursos del sistema y mejorando la responsividad de las aplicaciones.
+
+#### Características principales:
+- **Concurrencia**: Múltiples hilos pueden ejecutarse "al mismo tiempo"
+- **Paralelismo**: En sistemas multi-core, los hilos pueden ejecutarse realmente en paralelo
+- **Compartición de memoria**: Todos los hilos de un proceso comparten el mismo espacio de memoria
+- **Context switching**: El sistema operativo alterna entre hilos muy rápidamente
+
+#### Formas de crear hilos en Java:
+
+1. **Extendiendo la clase Thread**: Herencia directa, menos flexible
+2. **Implementando Runnable**: Composición, más flexible y recomendado
+3. **Usando expresiones lambda**: Forma moderna y concisa (Java 8+)
+4. **Usando Callable**: Para hilos que devuelven resultados
+
+#### Estados de un hilo:
+- **NEW**: Hilo creado pero no iniciado
+- **RUNNABLE**: Ejecutándose o listo para ejecutarse
+- **BLOCKED**: Bloqueado esperando un monitor lock
+- **WAITING**: Esperando indefinidamente a otro hilo
+- **TIMED_WAITING**: Esperando por un tiempo específico
+- **TERMINATED**: Ha terminado su ejecución
 
 ### 2.1 Creación de Hilos Básicos
 
@@ -93,6 +125,7 @@ public class BasicThreads {
         @Override
         public void run() {
             for (int i = 0; i < 5; i++) {
+
                 System.out.println(name + " - Iteración: " + i);
                 try {
                     Thread.sleep(1000);
@@ -216,262 +249,80 @@ public class ThreadStates {
 
 ## 3. ExecutorServices
 
-### 3.1 Tipos de ExecutorService
+En Java, la gestión manual de hilos puede volverse compleja y propensa a errores, especialmente cuando se requiere crear, reutilizar o finalizar muchos hilos. Para solucionar esto, Java proporciona el framework de **Executor** y, en particular, la interfaz **ExecutorService**, que permite gestionar pools de hilos de manera eficiente y sencilla.
 
+### ¿Qué es un ExecutorService?
+Un **ExecutorService** es un servicio que gestiona la ejecución de tareas concurrentes. Permite:
+- Ejecutar tareas de forma asíncrona.
+- Reutilizar hilos mediante pools (Thread Pools).
+- Controlar el ciclo de vida de los hilos y tareas.
+- Programar tareas periódicas o con retardo.
+
+### Ventajas frente a la gestión manual de hilos
+- **Reutilización de recursos**: Los hilos se reutilizan, evitando el coste de crear y destruir hilos frecuentemente.
+- **Escalabilidad**: Permite limitar el número de hilos concurrentes, evitando la sobrecarga del sistema.
+- **Simplicidad**: Facilita la gestión y el seguimiento de tareas concurrentes.
+
+### Tipos principales de ExecutorService
+- **newSingleThreadExecutor()**: Un solo hilo reutilizable.
+- **newFixedThreadPool(n)**: Un pool con un número fijo de hilos.
+- **newCachedThreadPool()**: Crea nuevos hilos según sea necesario y reutiliza los existentes.
+- **newScheduledThreadPool(n)**: Permite programar tareas periódicas o con retardo.
+
+### Ejemplo básico de uso
 ```java
-package com.dam.threads.executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import java.util.concurrent.*;
-import java.util.List;
-import java.util.ArrayList;
-
-public class ExecutorServiceExamples {
-    
+public class EjemploExecutor {
     public static void main(String[] args) {
-        // Diferentes tipos de ExecutorService
-        singleThreadExecutor();
-        fixedThreadPool();
-        cachedThreadPool();
-        scheduledThreadPool();
-        workStealingPool(); // Java 8+
-    }
-    
-    private static void singleThreadExecutor() {
-        System.out.println("\n=== SINGLE THREAD EXECUTOR ===");
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
         
-        for (int i = 0; i < 5; i++) {
-            final int taskId = i;
-            executor.submit(() -> {
-                System.out.println("Tarea " + taskId + 
-                    " ejecutada por: " + Thread.currentThread().getName());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
-        }
+        Runnable tarea = () -> {
+            System.out.println("Ejecutando tarea en: " + Thread.currentThread().getName());
+        };
         
-        executor.shutdown();
-        try {
-            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-        }
-    }
-    
-    private static void fixedThreadPool() {
-        System.out.println("\n=== FIXED THREAD POOL ===");
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-        
-        for (int i = 0; i < 10; i++) {
-            final int taskId = i;
-            executor.submit(() -> {
-                System.out.println("Tarea " + taskId + 
-                    " ejecutada por: " + Thread.currentThread().getName());
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
-        }
-        
-        executor.shutdown();
-        try {
-            executor.awaitTermination(30, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-        }
-    }
-    
-    private static void cachedThreadPool() {
-        System.out.println("\n=== CACHED THREAD POOL ===");
-        ExecutorService executor = Executors.newCachedThreadPool();
-        
-        for (int i = 0; i < 20; i++) {
-            final int taskId = i;
-            executor.submit(() -> {
-                System.out.println("Tarea " + taskId + 
-                    " ejecutada por: " + Thread.currentThread().getName());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
-        }
-        
-        executor.shutdown();
-        try {
-            executor.awaitTermination(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-        }
-    }
-    
-    private static void scheduledThreadPool() {
-        System.out.println("\n=== SCHEDULED THREAD POOL ===");
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        
-        // Tarea que se ejecuta una vez después de 2 segundos
-        executor.schedule(() -> {
-            System.out.println("Tarea programada ejecutada después de 2 segundos");
-        }, 2, TimeUnit.SECONDS);
-        
-        // Tarea que se ejecuta cada 3 segundos
-        ScheduledFuture<?> periodicTask = executor.scheduleAtFixedRate(() -> {
-            System.out.println("Tarea periódica: " + System.currentTimeMillis());
-        }, 1, 3, TimeUnit.SECONDS);
-        
-        // Cancelar después de 10 segundos
-        executor.schedule(() -> {
-            periodicTask.cancel(false);
-            executor.shutdown();
-        }, 10, TimeUnit.SECONDS);
-    }
-    
-    private static void workStealingPool() {
-        System.out.println("\n=== WORK STEALING POOL ===");
-        ExecutorService executor = Executors.newWorkStealingPool();
-        
-        List<Future<Integer>> futures = new ArrayList<>();
-        
-        for (int i = 0; i < 10; i++) {
-            final int taskId = i;
-            Future<Integer> future = executor.submit(() -> {
-                System.out.println("Procesando tarea " + taskId + 
-                    " en: " + Thread.currentThread().getName());
-                Thread.sleep(1000 + (int)(Math.random() * 2000));
-                return taskId * taskId;
-            });
-            futures.add(future);
-        }
-        
-        // Recoger resultados
-        for (int i = 0; i < futures.size(); i++) {
-            try {
-                Integer result = futures.get(i).get();
-                System.out.println("Resultado tarea " + i + ": " + result);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        executor.shutdown();
+        executor.submit(tarea);
+        executor.submit(tarea);
+        executor.shutdown(); // Importante: cerrar el executor
     }
 }
 ```
 
-### 3.2 Callable y Future
+### Métodos clave
+- `submit(Runnable/Callable)`: Envía una tarea para su ejecución.
+- `shutdown()`: Finaliza el pool de hilos de forma ordenada.
+- `shutdownNow()`: Intenta finalizar inmediatamente.
+- `awaitTermination(timeout, unit)`: Espera a que terminen todas las tareas.
 
-```java
-package com.dam.threads.executors;
-
-import java.util.concurrent.*;
-import java.util.List;
-import java.util.ArrayList;
-
-public class CallableAndFuture {
-    
-    // Callable que devuelve un resultado
-    static class CalculatorTask implements Callable<Integer> {
-        private final int number;
-        
-        public CalculatorTask(int number) {
-            this.number = number;
-        }
-        
-        @Override
-        public Integer call() throws Exception {
-            System.out.println("Calculando factorial de " + number + 
-                " en: " + Thread.currentThread().getName());
-            
-            Thread.sleep(2000); // Simular trabajo pesado
-            
-            int result = 1;
-            for (int i = 1; i <= number; i++) {
-                result *= i;
-            }
-            
-            return result;
-        }
-    }
-    
-    public static void main(String[] args) {
-        System.out.println("=== CALLABLE Y FUTURE ===");
-        
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-        
-        // Lista para almacenar los Future
-        List<Future<Integer>> futures = new ArrayList<>();
-        
-        // Enviar tareas
-        for (int i = 1; i <= 5; i++) {
-            Future<Integer> future = executor.submit(new CalculatorTask(i));
-            futures.add(future);
-        }
-        
-        // Obtener resultados
-        for (int i = 0; i < futures.size(); i++) {
-            try {
-                // get() es bloqueante
-                Integer result = futures.get(i).get(5, TimeUnit.SECONDS);
-                System.out.println("Factorial de " + (i + 1) + " = " + result);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                System.err.println("Error obteniendo resultado: " + e.getMessage());
-            }
-        }
-        
-        // CompletableFuture (Java 8+)
-        completableFutureExample();
-        
-        executor.shutdown();
-    }
-    
-    private static void completableFutureExample() {
-        System.out.println("\n=== COMPLETABLE FUTURE ===");
-        
-        CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return "Resultado de tarea 1";
-        });
-        
-        CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            return "Resultado de tarea 2";
-        });
-        
-        // Combinar resultados
-        CompletableFuture<String> combinedFuture = future1
-            .thenCombine(future2, (result1, result2) -> {
-                return result1 + " + " + result2;
-            });
-        
-        try {
-            String result = combinedFuture.get();
-            System.out.println("Resultado combinado: " + result);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
+En los ejemplos posteriores verás cómo usar ExecutorService para gestionar la concurrencia de forma más robusta y eficiente.
 
 ---
 
 ## 4. Sincronización con Locks
+
+En la programación concurrente en Java, la sincronización es fundamental para evitar condiciones de carrera y garantizar la integridad de los datos compartidos entre hilos. Aunque la palabra clave `synchronized` es la forma más básica de sincronización, Java proporciona mecanismos más avanzados y flexibles a través de la API `java.util.concurrent.locks`.
+
+### ¿Qué es un Lock?
+Un **Lock** es una abstracción que permite controlar el acceso a una sección crítica de código, asegurando que solo un hilo pueda ejecutarla a la vez. A diferencia de `synchronized`, los locks ofrecen mayor control, como la posibilidad de intentar adquirir el lock, interrumpir la espera, o usar diferentes modos de acceso (lectura/escritura).
+
+### Ventajas de los Locks frente a synchronized
+- Permiten intentar adquirir el lock sin bloquearse indefinidamente (`tryLock`).
+- Soportan interrupciones mientras se espera el lock.
+- Permiten estructuras de bloqueo más complejas (por ejemplo, múltiples locks, locks de lectura/escritura).
+- Mejor rendimiento en escenarios de alta concurrencia.
+
+### Tipos principales de Locks en Java
+- **ReentrantLock**: Lock exclusivo, permite que el mismo hilo lo adquiera varias veces (reentrante).
+- **ReadWriteLock**: Permite múltiples lectores o un solo escritor, ideal para estructuras de datos con muchas lecturas y pocas escrituras.
+- **StampedLock**: Introducido en Java 8, soporta modos de lectura optimista, lectura y escritura, mejorando el rendimiento en ciertos escenarios.
+
+### Cuándo usar cada tipo
+- Usa `ReentrantLock` cuando necesites más control que `synchronized` (por ejemplo, intentar adquirir el lock, o locks justos).
+- Usa `ReadWriteLock` cuando haya muchas operaciones de lectura y pocas de escritura.
+- Usa `StampedLock` para estructuras de datos inmutables o con muchas lecturas concurrentes y pocas escrituras.
+
+---
 
 ### 4.1 ReentrantLock
 
@@ -484,12 +335,12 @@ import java.util.concurrent.locks.Lock;
 public class ReentrantLockExample {
     private final Lock lock = new ReentrantLock();
     private int counter = 0;
-    
+
     public void increment() {
         lock.lock();
         try {
             counter++;
-            System.out.println(Thread.currentThread().getName() + 
+            System.out.println(Thread.currentThread().getName() +
                 " - Counter: " + counter);
             Thread.sleep(100); // Simular trabajo
         } catch (InterruptedException e) {
@@ -498,7 +349,7 @@ public class ReentrantLockExample {
             lock.unlock();
         }
     }
-    
+
     public int getCounter() {
         lock.lock();
         try {
@@ -507,10 +358,10 @@ public class ReentrantLockExample {
             lock.unlock();
         }
     }
-    
+
     public static void main(String[] args) throws InterruptedException {
         ReentrantLockExample example = new ReentrantLockExample();
-        
+
         // Crear varios hilos que incrementen el contador
         Thread[] threads = new Thread[5];
         for (int i = 0; i < threads.length; i++) {
@@ -711,6 +562,31 @@ public class StampedLockExample {
 
 ## 5. Semáforos
 
+En la programación concurrente, un **semáforo** es una herramienta de sincronización que controla el acceso a uno o más recursos compartidos mediante un contador. Es especialmente útil cuando se quiere limitar el número de hilos que pueden acceder simultáneamente a una sección crítica o a un recurso.
+
+### ¿Qué es un Semáforo?
+Un **Semaphore** en Java es un contador que restringe el número de hilos que pueden acceder a un recurso o sección crítica al mismo tiempo. Cuando el contador llega a cero, los hilos adicionales que intentan acceder quedan bloqueados hasta que otro hilo libere el recurso.
+
+### Ventajas y usos típicos
+- Limitar el acceso concurrente a recursos finitos (por ejemplo, conexiones a base de datos, impresoras, etc.).
+- Implementar pools de recursos.
+- Sincronizar el inicio o la finalización de tareas.
+
+### Tipos de Semáforos en Java
+- **Semaphore (clásico)**: Permite adquirir y liberar permisos, bloqueando si no hay permisos disponibles.
+- **Fair Semaphore**: Garantiza el orden de llegada de los hilos (FIFO), aunque puede ser menos eficiente.
+
+### Ejemplo básico de uso
+```java
+Semaphore semaphore = new Semaphore(3); // Máximo 3 hilos concurrentes
+
+semaphore.acquire(); // Solicita un permiso (bloquea si no hay)
+// ...sección crítica...
+semaphore.release(); // Libera el permiso
+```
+
+---
+
 ### 5.1 Semaphore Básico
 
 ```java
@@ -863,6 +739,29 @@ public class ResourcePoolExample {
 ---
 
 ## 6. CountDownLatch
+
+`CountDownLatch` es una herramienta de sincronización que permite a uno o más hilos esperar hasta que un conjunto de operaciones realizadas en otros hilos complete su ejecución. Es muy útil para coordinar el inicio o la finalización de tareas en paralelo.
+
+### ¿Qué es un CountDownLatch?
+Un **CountDownLatch** se inicializa con un contador. Los hilos pueden llamar a `await()` para esperar a que el contador llegue a cero. Otros hilos llaman a `countDown()` para disminuir el contador. Cuando el contador llega a cero, todos los hilos que estaban esperando son liberados.
+
+### Usos típicos
+- Esperar a que varios servicios estén listos antes de continuar.
+- Sincronizar el inicio de una carrera o tarea.
+- Esperar a que terminen varias tareas en paralelo antes de continuar.
+
+### Ejemplo básico de uso
+```java
+CountDownLatch latch = new CountDownLatch(3);
+
+// En hilos trabajadores:
+latch.countDown(); // Llamar cuando termina la tarea
+
+// En el hilo principal:
+latch.await(); // Espera hasta que el contador llegue a 0
+```
+
+---
 
 ### 6.1 CountDownLatch Básico
 
@@ -1220,318 +1119,6 @@ public class PhaserExample {
             System.out.println("Estudiante " + id + " completó parte " + part + 
                 " en " + timeToComplete + "ms");
         }
-    }
-}
-```
-
----
-
-## 8. Hilos con Spring Boot 3.2
-
-### 8.1 Configuración de Spring Boot
-
-#### pom.xml para Spring Boot
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath/>
-    </parent>
-
-    <groupId>com.dam.springthreads</groupId>
-    <artifactId>springboot-threads</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-
-    <properties>
-        <java.version>21</java.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-```
-
-### 8.2 Configuración de TaskExecutor
-
-```java
-package com.dam.springthreads.config;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-import java.util.concurrent.Executor;
-
-@Configuration
-@EnableAsync
-public class AsyncConfiguration {
-    
-    @Bean(name = "taskExecutor")
-    public Executor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("AsyncTask-");
-        executor.setRejectedExecutionHandler(new ThreadPoolTaskExecutor.CallerRunsPolicy());
-        executor.initialize();
-        return executor;
-    }
-    
-    @Bean(name = "customTaskExecutor")
-    public Executor customTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(20);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("CustomTask-");
-        executor.initialize();
-        return executor;
-    }
-    
-    @Bean
-    public ThreadPoolTaskScheduler taskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(5);
-        scheduler.setThreadNamePrefix("Scheduled-");
-        scheduler.initialize();
-        return scheduler;
-    }
-}
-```
-
-### 8.3 Servicios Asíncronos
-
-```java
-package com.dam.springthreads.service;
-
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
-
-@Service
-public class AsyncTaskService {
-    
-    @Async("taskExecutor")
-    public void executeAsyncTask(String taskName) {
-        System.out.println("Ejecutando tarea asíncrona: " + taskName + 
-            " en hilo: " + Thread.currentThread().getName());
-        
-        try {
-            Thread.sleep(2000 + ThreadLocalRandom.current().nextInt(3000));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        
-        System.out.println("Tarea " + taskName + " completada!");
-    }
-    
-    @Async("customTaskExecutor")
-    public CompletableFuture<String> executeAsyncTaskWithResult(String input) {
-        System.out.println("Procesando: " + input + 
-            " en hilo: " + Thread.currentThread().getName());
-        
-        try {
-            Thread.sleep(1000 + ThreadLocalRandom.current().nextInt(2000));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return CompletableFuture.completedFuture("Interrumpido");
-        }
-        
-        String result = "Resultado procesado para: " + input;
-        return CompletableFuture.completedFuture(result);
-    }
-    
-    @Async
-    public CompletableFuture<Integer> calculateFactorial(int number) {
-        System.out.println("Calculando factorial de " + number + 
-            " en: " + Thread.currentThread().getName());
-        
-        try {
-            Thread.sleep(1000); // Simular trabajo pesado
-            
-            int result = 1;
-            for (int i = 1; i <= number; i++) {
-                result *= i;
-                if (result < 0) { // Overflow
-                    throw new ArithmeticException("Overflow calculating factorial");
-                }
-            }
-            
-            return CompletableFuture.completedFuture(result);
-            
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return CompletableFuture.completedFuture(-1);
-        }
-    }
-}
-```
-
-### 8.4 Tareas Programadas
-
-```java
-package com.dam.springthreads.service;
-
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicInteger;
-
-@Service
-public class ScheduledTaskService {
-    
-    private final AtomicInteger counter = new AtomicInteger(0);
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    
-    @Scheduled(fixedRate = 5000) // Cada 5 segundos
-    public void reportCurrentTime() {
-        System.out.println("La hora actual es: " + 
-            LocalDateTime.now().format(formatter) + 
-            " - Contador: " + counter.incrementAndGet());
-    }
-    
-    @Scheduled(fixedDelay = 3000, initialDelay = 1000) // 3 segundos después de completar, 1 segundo inicial
-    public void performMaintenanceTask() {
-        System.out.println("Ejecutando tarea de mantenimiento en: " + 
-            Thread.currentThread().getName() + 
-            " a las " + LocalDateTime.now().format(formatter));
-        
-        try {
-            Thread.sleep(1000); // Simular trabajo
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-    
-    @Scheduled(cron = "0 */2 * * * *") // Cada 2 minutos
-    public void generateReport() {
-        System.out.println("Generando reporte cada 2 minutos: " + 
-            LocalDateTime.now().format(formatter));
-    }
-}
-```
-
-### 8.5 Controller para Pruebas
-
-```java
-package com.dam.springthreads.controller;
-
-import com.dam.springthreads.service.AsyncTaskService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-@RestController
-@RequestMapping("/api/tasks")
-public class TaskController {
-    
-    @Autowired
-    private AsyncTaskService asyncTaskService;
-    
-    @PostMapping("/async/{taskName}")
-    public String executeAsyncTask(@PathVariable String taskName) {
-        asyncTaskService.executeAsyncTask(taskName);
-        return "Tarea " + taskName + " iniciada de forma asíncrona";
-    }
-    
-    @PostMapping("/process/{input}")
-    public CompletableFuture<String> processAsync(@PathVariable String input) {
-        return asyncTaskService.executeAsyncTaskWithResult(input);
-    }
-    
-    @GetMapping("/factorial/{number}")
-    public String calculateFactorial(@PathVariable int number) 
-            throws ExecutionException, InterruptedException {
-        
-        if (number < 0 || number > 12) {
-            return "Error: Número debe estar entre 0 y 12";
-        }
-        
-        CompletableFuture<Integer> future = asyncTaskService.calculateFactorial(number);
-        Integer result = future.get(); // Bloquea hasta obtener resultado
-        
-        return "Factorial de " + number + " = " + result;
-    }
-    
-    @GetMapping("/multiple-tasks")
-    public String executeMultipleTasks() throws ExecutionException, InterruptedException {
-        
-        // Ejecutar múltiples tareas en paralelo
-        CompletableFuture<String> task1 = asyncTaskService.executeAsyncTaskWithResult("Tarea-1");
-        CompletableFuture<String> task2 = asyncTaskService.executeAsyncTaskWithResult("Tarea-2");
-        CompletableFuture<String> task3 = asyncTaskService.executeAsyncTaskWithResult("Tarea-3");
-        
-        // Esperar que todas terminen
-        CompletableFuture<Void> allTasks = CompletableFuture.allOf(task1, task2, task3);
-        allTasks.get();
-        
-        return "Todas las tareas completadas: " + 
-               task1.get() + ", " + 
-               task2.get() + ", " + 
-               task3.get();
-    }
-}
-```
-
-### 8.6 Aplicación Principal
-
-```java
-package com.dam.springthreads;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
-@SpringBootApplication
-@EnableScheduling
-public class SpringThreadsApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(SpringThreadsApplication.class, args);
-        System.out.println("Aplicación Spring Boot iniciada!");
-        System.out.println("Prueba los endpoints en: http://localhost:8080/api/tasks/");
     }
 }
 ```
