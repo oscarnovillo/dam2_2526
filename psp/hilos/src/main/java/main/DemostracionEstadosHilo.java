@@ -5,21 +5,23 @@ package main;
  */
 public class DemostracionEstadosHilo {
 
+    public static final int NUM_HILOS = 2;
+
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("=== DEMOSTRACIÓN DE ESTADOS DE 10 HILOS ===\n");
+        System.out.println("=== DEMOSTRACIÓN DE ESTADOS DE "+NUM_HILOS+" HILOS ===\n");
 
         System.out.println("Hilo principal ejecutándose en: " + Thread.currentThread().getName());
         System.out.println("ID del hilo principal: " + Thread.currentThread().getId());
         System.out.println();
 
         // Crear 10 hilos pero NO iniciarlos aún
-        Thread[] hilos = new Thread[10];
-        for (int i = 0; i < 10; i++) {
+        Thread[] hilos = new Thread[NUM_HILOS];
+        for (int i = 0; i < NUM_HILOS; i++) {
             hilos[i] = new Thread(new TareaEjemplo(i + 1), "Hilo-Trabajador-" + (i + 1));
         }
 
-        System.out.println("1. DESPUÉS DE CREAR LOS 10 HILOS (antes de start()):");
-        for (int i = 0; i < 10; i++) {
+        System.out.println("1. DESPUÉS DE CREAR LOS "+NUM_HILOS+" HILOS (antes de start()):");
+        for (int i = 0; i < NUM_HILOS; i++) {
             System.out.println("   Hilo " + (i + 1) + " - Estado: " + hilos[i].getState() +
                              " | Vivo: " + hilos[i].isAlive() + " | ID: " + hilos[i].getId());
         }
@@ -29,7 +31,7 @@ public class DemostracionEstadosHilo {
         long tiempoInicioTotal = System.nanoTime();
 
         // Iniciar todos los hilos (¡SIN ESPERAR!)
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NUM_HILOS; i++) {
             long tiempoStart = System.nanoTime();
             hilos[i].start(); // AQUÍ ES DONDE OCURRE LA MAGIA
             long tiempoPostStart = System.nanoTime();
@@ -43,7 +45,7 @@ public class DemostracionEstadosHilo {
 
         // Inmediatamente después de start() - verificar estados
         System.out.println("3. ESTADOS INMEDIATAMENTE DESPUÉS DE start():");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NUM_HILOS; i++) {
             System.out.println("   Hilo " + (i + 1) + " - Estado: " + hilos[i].getState() +
                              " | Vivo: " + hilos[i].isAlive());
         }
@@ -54,7 +56,7 @@ public class DemostracionEstadosHilo {
         for (int i = 1; i <= 8; i++) {
             System.out.println("   Hilo principal trabajando... paso " + i);
             System.out.print("   Estados actuales: ");
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < NUM_HILOS; j++) {
                 System.out.print("H" + (j + 1) + ":" + hilos[j].getState() + " ");
             }
             System.out.println();
@@ -63,7 +65,7 @@ public class DemostracionEstadosHilo {
         System.out.println();
 
         System.out.println("5. ESPERANDO A QUE TERMINEN TODOS LOS HILOS (join()):");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NUM_HILOS; i++) {
             System.out.println("   Esperando al hilo " + (i + 1) + "...");
             hilos[i].join(); // AQUÍ SÍ esperamos
             System.out.println("   Hilo " + (i + 1) + " terminado - Estado: " + hilos[i].getState());
@@ -96,7 +98,7 @@ class TareaEjemplo implements Runnable {
             System.out.println("   → Hilo trabajador " + idTarea + " ejecutando tarea " + i);
             try {
                 // Tiempo de trabajo aleatorio entre 100-300ms para ver mejor la concurrencia
-                Thread.sleep(100 + (int)(Math.random() * 200));
+                Thread.sleep(10000 + (int)(Math.random() * 200));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;

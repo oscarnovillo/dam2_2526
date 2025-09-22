@@ -67,7 +67,7 @@ public class MainHilosVirtualesLock {
         mostrarResultados(contador, sumaTotal, sumaEsperada, tiempoTotal, numeros.length);
     }
 
-    private static void procesarNumeroConLock(int numeroAleatorio) {
+    private static synchronized void procesarNumeroConLock(int numeroAleatorio) {
         // Pausa de 100 milisegundos FUERA de la región crítica
         try {
             Thread.sleep(PAUSA_MS);
@@ -89,8 +89,10 @@ public class MainHilosVirtualesLock {
                 System.out.printf("Procesados: %d números (Hilo virtual: %s) [LOCK]%n",
                                 contador, Thread.currentThread().getName());
             }
+            //lock.unlock();
         } finally {
             lock.unlock(); // ¡Siempre liberar el lock!
+
         }
     }
 
