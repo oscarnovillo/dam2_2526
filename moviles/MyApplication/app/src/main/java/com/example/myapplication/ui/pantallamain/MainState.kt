@@ -6,5 +6,6 @@ data class MainState(
     val textoLabel: String = "" ,
     val textoCaja: String = "",
     val cancion: Cancion = Cancion(),
+    val error :String? = null,
 
     )

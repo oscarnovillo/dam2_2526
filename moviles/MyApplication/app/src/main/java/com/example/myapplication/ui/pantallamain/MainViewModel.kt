@@ -17,9 +17,17 @@ class MainViewModel : ViewModel() {
     fun clickButtonUno()
     {
         val useCase = VerCancionUseCase()
+
+        if(useCase == null)
+        {
+            _state.value = state.value?.copy(
+                error = "error en usecase",
+            )
+            return
+        }
         _state.value = state.value?.copy(
-            textoLabel = useCase.invoke(0).titulo,
-            cancion = useCase.invoke(0)
+            textoLabel = useCase.invoke(0)?.titulo ?: "",
+
         )
     }
 

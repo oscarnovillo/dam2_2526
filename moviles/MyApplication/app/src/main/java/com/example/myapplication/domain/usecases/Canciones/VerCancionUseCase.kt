@@ -4,7 +4,7 @@ import com.example.myapplication.domain.modelo.Cancion
 
 class VerCancionUseCase {
 
-    operator fun invoke(id: Int): Cancion {
+    operator fun invoke(id: Int): Cancion? {
 
 
         return Cancion("nn","nn")

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,23 +36,33 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // no hace falta si hay viewbinding
         mapeoGrafico();
         eventos();
 
-        viewModel.state.observe(this){ state ->
-            binding.editTextText.setText(state.textoCaja)
 
-//            txt.text = state.textoLabel
-//
-//            editText.setText(state.textoCaja)
+        observacion()
+
+    }
+
+    private fun observacion() {
+        viewModel.state.observe(this) { state ->
+            binding.editTextText.setText(state.textoCaja)
+            state.error?.let { error ->
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+            }
+
+    //            txt.text = state.textoLabel
+    //
+    //            editText.setText(state.textoCaja)
 
         }
-
     }
 
     private fun mapeoGrafico(){
