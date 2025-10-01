@@ -18,15 +18,9 @@ class MainViewModel : ViewModel() {
     {
         val useCase = VerCancionUseCase()
 
-        if(useCase == null)
-        {
-            _state.value = state.value?.copy(
-                error = "error en usecase",
-            )
-            return
-        }
+
         _state.value = state.value?.copy(
-            textoLabel = useCase.invoke(0)?.titulo ?: "",
+            textoLabel = useCase.invoke(0).titulo,
 
         )
     }
