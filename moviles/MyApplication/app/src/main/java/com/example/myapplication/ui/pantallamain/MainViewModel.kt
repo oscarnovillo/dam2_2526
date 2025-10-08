@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.domain.modelo.Cancion
+import com.example.myapplication.domain.usecases.Canciones.AddCancionUseCase
 import com.example.myapplication.domain.usecases.Canciones.VerCancionUseCase
 
 class MainViewModel : ViewModel() {
@@ -14,23 +16,39 @@ class MainViewModel : ViewModel() {
     val state : LiveData<MainState> get() = _state
 
 
-    fun clickButtonUno()
+    fun clickButtonGuardar(cancion: Cancion)
+
     {
-        val useCase = VerCancionUseCase()
+        val addCancionUseCase = AddCancionUseCase()
+
+        if (addCancionUseCase.invoke(cancion))
+        {
+            _state.value = _state.value?.copy(mensaje= "Cancion añadida", cancion = cancion)
+        }
+        else
+        {
+            _state.value = _state.value?.copy(mensaje= "ERROR COMO UNA CASA")
+        }
 
 
-        _state.value = state.value?.copy(
-            textoLabel = useCase.invoke(0).titulo,
-
-        )
     }
 
     fun clickButtonPrimer()
     {
-        _state.value = state.value?.copy(textoLabel = "kkk", textoCaja = "texto2")
-       // _state.value = MainState(textoCaja = "texto2",textoLabel = "kkk", )
-//        _state.value?.textoLabel = "kkk"
-//        _state.value?.textoCaja = "texto2"
+    }
+
+    fun limpiarMensaje() {
+        _state.value = _state.value?.copy(mensaje= null)
+    }
+
+    fun pasarCancion() {
+        val indice = _state.value?.indiceCancion ?: 0
+
+
+        val cancion = VerCancionUseCase().invoke(indice)
+        _state.value = _state.value?.copy(cancion = cancion, indiceCancion = indice+1,
+            isDisable = indice+1>0)
+
     }
 
 }

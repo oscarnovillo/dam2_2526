@@ -12,6 +12,7 @@ object RepositorioCanciones {
     }
 
     fun getCancion(id:Int) = canciones[id]
+    fun addCancion(cancion: Cancion) = canciones.add(cancion)
 
 //    fun getCancion(id:Int) : Cancion
 //    {

@@ -3,9 +3,10 @@ package com.example.myapplication.ui.pantallamain
 import com.example.myapplication.domain.modelo.Cancion
 
 data class MainState(
-    val textoLabel: String = "" ,
-    val textoCaja: String = "",
+
+    val indiceCancion: Int = 0,
+    val isDisable: Boolean = false,
     val cancion: Cancion = Cancion(),
-    val error :String? = null,
+    val mensaje :String? = null,
 
     )

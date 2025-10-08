@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.domain.modelo.Cancion
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
@@ -53,9 +54,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun observacion() {
         viewModel.state.observe(this) { state ->
-            binding.editTextText.setText(state.textoCaja)
-            state.error?.let { error ->
+            binding.textTitulo.setText(state.cancion.titulo)
+            binding.textInterprete?.setText(state.cancion.interprete)
+            binding.button.isEnabled = !state.isDisable
+
+
+
+            state.mensaje?.let { error ->
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                viewModel.limpiarMensaje()
             }
 
     //            txt.text = state.textoLabel
@@ -70,20 +77,24 @@ class MainActivity : AppCompatActivity() {
         buttonPrimero = findViewById<Button>(R.id.buttonPrimero)
 
         txt  = findViewById<TextView>(R.id.textView)
-        editText = findViewById<EditText>(R.id.editTextText)
-
+        editText = findViewById<EditText>(R.id.textTitulo)
     }
 
     private fun eventos() {
         button.setOnClickListener {
             //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
-            viewModel.clickButtonUno()
+
+            var cancion = Cancion(
+                binding.textTitulo.text.toString(),
+                binding.textInterprete?.text.toString()
+            )
+            viewModel.clickButtonGuardar(cancion)
 
 
         }
        buttonPrimero.setOnClickListener {
             //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
-            viewModel.clickButtonPrimer()
+            viewModel.pasarCancion()
         }
     }
 }

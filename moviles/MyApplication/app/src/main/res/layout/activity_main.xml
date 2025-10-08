@@ -17,7 +17,7 @@
         android:layout_marginTop="0dp"
 
         android:layout_marginEnd="0dp"
-        android:text="@string/button"
+        android:text="GUARDAR"
 
         app:layout_constraintStart_toStartOf="@+id/view2"
         app:layout_constraintTop_toTopOf="@id/textView" />
@@ -102,24 +102,24 @@
         app:layout_constraintGuide_percent="0.8" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/textTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:text="Titulo"
         app:layout_constraintStart_toEndOf="@+id/buttonPrimero"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/textInterprete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        android:text="Interprete"
+        app:layout_constraintStart_toStartOf="@+id/textTitulo"
+        app:layout_constraintTop_toBottomOf="@+id/textTitulo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
