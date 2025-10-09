@@ -17,13 +17,11 @@ import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var button :Button
     private lateinit var txt: TextView
     private lateinit var editText: EditText
     private lateinit var buttonPrimero: Button
-
 
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(
@@ -47,9 +45,7 @@ class MainActivity : AppCompatActivity() {
         mapeoGrafico();
         eventos();
 
-
         observacion()
-
     }
 
     private fun observacion() {
@@ -57,8 +53,6 @@ class MainActivity : AppCompatActivity() {
             binding.textTitulo.setText(state.cancion.titulo)
             binding.textInterprete?.setText(state.cancion.interprete)
             binding.button.isEnabled = !state.isDisable
-
-
 
             state.mensaje?.let { error ->
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
@@ -75,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     private fun mapeoGrafico(){
         button = findViewById<Button>(R.id.button)
         buttonPrimero = findViewById<Button>(R.id.buttonPrimero)
-
         txt  = findViewById<TextView>(R.id.textView)
         editText = findViewById<EditText>(R.id.textTitulo)
     }
@@ -84,12 +77,19 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener {
             //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
 
+            // Obtener el tipo seleccionado del RadioGroup usando ViewBinding
+            val tipoSeleccionado = when(binding.radioGroupTipo?.checkedRadioButtonId) {
+                R.id.radioSolista -> "solista"
+                R.id.radioGrupo -> "grupo"
+                else -> "solista" // valor por defecto
+            }
+
             var cancion = Cancion(
                 binding.textTitulo.text.toString(),
-                binding.textInterprete?.text.toString()
+                binding.textInterprete?.text.toString() ?: "",
+                tipoSeleccionado
             )
             viewModel.clickButtonGuardar(cancion)
-
 
         }
        buttonPrimero.setOnClickListener {

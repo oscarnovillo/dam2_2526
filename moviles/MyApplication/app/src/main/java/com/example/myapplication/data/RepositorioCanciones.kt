@@ -11,6 +11,10 @@ object RepositorioCanciones {
         canciones.add(Cancion("j","j"))
     }
 
+    fun size() = canciones.size
+
+    val numCanciones: Int
+        get() = canciones.size
     fun getCancion(id:Int) = canciones[id]
     fun addCancion(cancion: Cancion) = canciones.add(cancion)
 

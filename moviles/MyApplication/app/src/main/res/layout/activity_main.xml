@@ -121,5 +121,28 @@
         app:layout_constraintStart_toStartOf="@+id/textTitulo"
         app:layout_constraintTop_toBottomOf="@+id/textTitulo" />
 
+    <RadioGroup
+        android:id="@+id/radioGroupTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/textInterprete"
+        app:layout_constraintTop_toBottomOf="@+id/textInterprete">
+
+        <RadioButton
+            android:id="@+id/radioSolista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Solista" />
+
+        <RadioButton
+            android:id="@+id/radioGrupo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Grupo" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

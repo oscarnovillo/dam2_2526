@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.data.RepositorioCanciones
 import com.example.myapplication.domain.modelo.Cancion
 import com.example.myapplication.domain.usecases.Canciones.AddCancionUseCase
 import com.example.myapplication.domain.usecases.Canciones.VerCancionUseCase
@@ -12,9 +13,13 @@ class MainViewModel : ViewModel() {
 
 
 
-    private var _state : MutableLiveData<MainState> = MutableLiveData(MainState())
+    private var _state : MutableLiveData<MainState> = MutableLiveData()
     val state : LiveData<MainState> get() = _state
 
+
+    init {
+        _state.value = MainState(numCanciones = RepositorioCanciones.size())
+    }
 
     fun clickButtonGuardar(cancion: Cancion)
 
