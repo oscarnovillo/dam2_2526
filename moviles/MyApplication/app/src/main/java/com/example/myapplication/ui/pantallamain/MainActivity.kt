@@ -18,10 +18,7 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var button :Button
-    private lateinit var txt: TextView
-    private lateinit var editText: EditText
-    private lateinit var buttonPrimero: Button
+
 
     private val viewModel: MainViewModel by viewModels(){
         MainViewModelFactory()
@@ -38,17 +35,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // no hace falta si hay viewbinding
-        mapeoGrafico()
         eventos()
         observacion()
 
-        // Botón para ver el listado de canciones
-        val buttonVerListado = findViewById<Button>(R.id.buttonVerListado)
-        buttonVerListado.setOnClickListener {
-            val intent = android.content.Intent(this, com.example.myapplication.ui.pantallalistado.ListadoCancionesActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 
     private fun observacion() {
@@ -69,15 +59,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun mapeoGrafico(){
-        button = findViewById<Button>(R.id.button)
-        buttonPrimero = findViewById<Button>(R.id.buttonPrimero)
-        txt  = findViewById<TextView>(R.id.textView)
-        editText = findViewById<EditText>(R.id.textTitulo)
-    }
 
     private fun eventos() {
-        button.setOnClickListener {
+        binding.button.setOnClickListener {
             //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
 
             // Obtener el tipo seleccionado del RadioGroup usando ViewBinding
@@ -95,9 +79,14 @@ class MainActivity : AppCompatActivity() {
             viewModel.clickButtonGuardar(cancion)
 
         }
-       buttonPrimero.setOnClickListener {
+       binding.buttonPrimero.setOnClickListener {
             //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
             viewModel.pasarCancion()
+        }
+
+        binding.buttonVerListado?.setOnClickListener {
+            val intent = android.content.Intent(this, com.example.myapplication.ui.pantallalistado.ListadoCancionesActivity::class.java)
+            startActivity(intent)
         }
     }
 }

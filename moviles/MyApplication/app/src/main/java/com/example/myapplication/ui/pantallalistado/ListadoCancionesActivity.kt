@@ -6,23 +6,26 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.databinding.ActivityListadoCancionesBinding
+import com.example.myapplication.databinding.ActivityMainBinding
 
 class ListadoCancionesActivity : ComponentActivity() {
     private val viewModel: ListadoCancionesViewModel by viewModels()
     private lateinit var adapter: CancionAdapter
+    private lateinit var binding: ActivityListadoCancionesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_listado_canciones)
+        binding = ActivityListadoCancionesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewCanciones)
-        adapter = CancionAdapter(emptyList())
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+
+        adapter = CancionAdapter()
+        binding.recyclerViewCanciones.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewCanciones.adapter = adapter
 
         viewModel.state.observe(this) { state ->
-            adapter.updateCanciones(state.canciones)
+            adapter.submitList(state.canciones)
         }
     }
 }
-
