@@ -17,6 +17,7 @@ object RepositorioCanciones {
         get() = canciones.size
     fun getCancion(id:Int) = canciones[id]
     fun addCancion(cancion: Cancion) = canciones.add(cancion)
+    fun getCanciones(): List<Cancion> = canciones.toList()
 
 //    fun getCancion(id:Int) : Cancion
 //    {

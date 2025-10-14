@@ -23,29 +23,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var buttonPrimero: Button
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(
-
-        )
+    private val viewModel: MainViewModel by viewModels(){
+        MainViewModelFactory()
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         // no hace falta si hay viewbinding
-        mapeoGrafico();
-        eventos();
-
+        mapeoGrafico()
+        eventos()
         observacion()
+
+        // Botón para ver el listado de canciones
+        val buttonVerListado = findViewById<Button>(R.id.buttonVerListado)
+        buttonVerListado.setOnClickListener {
+            val intent = android.content.Intent(this, com.example.myapplication.ui.pantallalistado.ListadoCancionesActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun observacion() {
