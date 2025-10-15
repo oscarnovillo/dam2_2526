@@ -1,17 +1,15 @@
 package com.example.myapplication.ui.pantallalistado
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.R
 import com.example.myapplication.databinding.ItemCancionBinding
 import com.example.myapplication.domain.modelo.Cancion
 
 class CancionAdapter(
+    val actions : CancionesActions,
     val onClickView : (Cancion) -> Unit,
 ) : ListAdapter<Cancion, CancionAdapter.CancionViewHolder>(
     CancionDiffCallback()
@@ -47,5 +45,10 @@ class CancionAdapter(
         override fun areContentsTheSame(oldItem: Cancion, newItem: Cancion): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface CancionesActions {
+        fun onItemClick(cancion: Cancion)
+
     }
 }

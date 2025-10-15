@@ -22,7 +22,14 @@ class ListadoCancionesActivity : ComponentActivity() {
         setContentView(binding.root)
 
 
-        adapter = CancionAdapter ( this::sacarCancion)
+        adapter = CancionAdapter (
+            actions = object : CancionAdapter.CancionesActions {
+                override fun onItemClick(cancion: Cancion) {
+                    //Click
+                }
+
+            }
+            , onClickView = this::sacarCancion)
         binding.recyclerViewCanciones.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewCanciones.adapter = adapter
 

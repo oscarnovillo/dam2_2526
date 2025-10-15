@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity() {
                         }
                         // Puedes manejar otros eventos aquí si los usas
                         is UiEvent.Navigate -> TODO()
+                        UiEvent.PopBackStack -> TODO()
+
                     }
                 }
             }
