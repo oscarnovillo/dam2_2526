@@ -43,50 +43,58 @@ class MainActivity : AppCompatActivity() {
 
     private fun observacion() {
         viewModel.state.observe(this) { state ->
-            binding.textTitulo.setText(state.cancion.titulo)
-            binding.textInterprete?.setText(state.cancion.interprete)
-            binding.button.isEnabled = !state.isDisable
+            with(binding) {
+                textTitulo.setText(state.cancion.titulo)
+                textInterprete?.setText(state.cancion.interprete)
+                button.isEnabled = !state.isDisable
 
-            state.mensaje?.let { error ->
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-                viewModel.limpiarMensaje()
+                state.mensaje?.let { error ->
+                    Toast.makeText(this@MainActivity, error, Toast.LENGTH_LONG).show()
+                    viewModel.limpiarMensaje()
+                }
+
+                //            txt.text = state.textoLabel
+                //
+                //            editText.setText(state.textoCaja)
             }
-
-    //            txt.text = state.textoLabel
-    //
-    //            editText.setText(state.textoCaja)
-
         }
     }
 
 
     private fun eventos() {
-        binding.button.setOnClickListener {
-            //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
+        with(binding) {
+            button.setOnClickListener {
+                //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
 
-            // Obtener el tipo seleccionado del RadioGroup usando ViewBinding
-            val tipoSeleccionado = when(binding.radioGroupTipo?.checkedRadioButtonId) {
-                R.id.radioSolista -> "solista"
-                R.id.radioGrupo -> "grupo"
-                else -> "solista" // valor por defecto
+                // Obtener el tipo seleccionado del RadioGroup usando ViewBinding
+                val tipoSeleccionado = when (radioGroupTipo?.checkedRadioButtonId) {
+                    R.id.radioSolista -> "solista"
+                    R.id.radioGrupo -> "grupo"
+                    else -> "solista" // valor por defecto
+                }
+
+                var cancion = Cancion(
+                    textTitulo.text.toString(),
+                    textInterprete?.text.toString() ?: "",
+                    tipoSeleccionado
+                )
+
+
+                viewModel.clickButtonGuardar(cancion)
+
+            }
+            buttonPrimero.setOnClickListener {
+                //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
+                viewModel.pasarCancion()
             }
 
-            var cancion = Cancion(
-                binding.textTitulo.text.toString(),
-                binding.textInterprete?.text.toString() ?: "",
-                tipoSeleccionado
-            )
-            viewModel.clickButtonGuardar(cancion)
-
-        }
-       binding.buttonPrimero.setOnClickListener {
-            //Toast.makeText(this,"mensaje",Toast.LENGTH_LONG).show()
-            viewModel.pasarCancion()
-        }
-
-        binding.buttonVerListado?.setOnClickListener {
-            val intent = android.content.Intent(this, com.example.myapplication.ui.pantallalistado.ListadoCancionesActivity::class.java)
-            startActivity(intent)
+            buttonVerListado?.setOnClickListener {
+                val intent = android.content.Intent(
+                    this@MainActivity,
+                    com.example.myapplication.ui.pantallalistado.ListadoCancionesActivity::class.java
+                )
+                startActivity(intent)
+            }
         }
     }
 }
