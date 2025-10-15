@@ -13,6 +13,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.domain.modelo.Cancion
+import com.example.myapplication.ui.common.UiEvent
+import com.google.android.material.snackbar.Snackbar
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
@@ -48,14 +50,24 @@ class MainActivity : AppCompatActivity() {
                 textInterprete?.setText(state.cancion.interprete)
                 button.isEnabled = !state.isDisable
 
-                state.mensaje?.let { error ->
-                    Toast.makeText(this@MainActivity, error, Toast.LENGTH_LONG).show()
-                    viewModel.limpiarMensaje()
+                state.uiEvent?.let { event ->
+                    when (event) {
+                        is UiEvent.ShowSnackbar -> {
+                            val snackbar = Snackbar.make(
+                                root,
+                                event.message,
+                                Snackbar.LENGTH_LONG
+                            )
+                            snackbar.setAction(event.action ?: "UNDO") {
+                                // Aquí puedes manejar la acción de deshacer si lo necesitas
+                            }
+                            snackbar.show()
+                            viewModel.limpiarMensaje()
+                        }
+                        // Puedes manejar otros eventos aquí si los usas
+                        is UiEvent.Navigate -> TODO()
+                    }
                 }
-
-                //            txt.text = state.textoLabel
-                //
-                //            editText.setText(state.textoCaja)
             }
         }
     }

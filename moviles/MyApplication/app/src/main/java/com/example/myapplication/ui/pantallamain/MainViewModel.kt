@@ -22,9 +22,14 @@ class MainViewModel(
 
     fun clickButtonGuardar(cancion: Cancion) {
         if (addCancionUseCase.invoke(cancion)) {
-            state.value = state.value?.copy(mensaje = "Cancion añadida", cancion = cancion)
+            state.value = state.value?.copy(
+                uiEvent = com.example.myapplication.ui.common.UiEvent.ShowSnackbar("Cancion añadida"),
+                cancion = cancion
+            )
         } else {
-            state.value = state.value?.copy(mensaje = "ERROR COMO UNA CASA")
+            state.value = state.value?.copy(
+                uiEvent = com.example.myapplication.ui.common.UiEvent.ShowSnackbar("ERROR COMO UNA CASA")
+            )
         }
     }
 
@@ -32,7 +37,7 @@ class MainViewModel(
     }
 
     fun limpiarMensaje() {
-        state.value = state.value?.copy(mensaje = null)
+        state.value = state.value?.copy(uiEvent = null)
     }
 
     fun pasarCancion() {
