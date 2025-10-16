@@ -26,6 +26,7 @@ class ListadoCancionesActivity : ComponentActivity() {
             actions = object : CancionAdapter.CancionesActions {
                 override fun onItemClick(cancion: Cancion) {
                     //Click
+
                 }
 
             }

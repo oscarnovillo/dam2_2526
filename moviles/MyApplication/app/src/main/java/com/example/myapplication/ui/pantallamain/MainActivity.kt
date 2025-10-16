@@ -58,16 +58,18 @@ class MainActivity : AppCompatActivity() {
                                 event.message,
                                 Snackbar.LENGTH_LONG
                             )
-                            snackbar.setAction(event.action ?: "UNDO") {
-                                // Aquí puedes manejar la acción de deshacer si lo necesitas
+                            event.action?.let {
+                                snackbar.setAction(event.action ?: "UNDO") {
+                                    // Aquí puedes manejar la acción de deshacer si lo necesitas
+                                }
                             }
                             snackbar.show()
                             viewModel.limpiarMensaje()
                         }
                         // Puedes manejar otros eventos aquí si los usas
                         is UiEvent.Navigate -> TODO()
-                        UiEvent.PopBackStack -> TODO()
-
+                        else -> {}
+                            // No hacer nada
                     }
                 }
             }
