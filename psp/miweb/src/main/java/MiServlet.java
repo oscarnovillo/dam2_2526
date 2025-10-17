@@ -9,13 +9,22 @@ import java.io.IOException;
 @WebServlet("/mi")
 public class MiServlet extends HttpServlet  {
 
+
+    // no se hace, caca
     private int i = 0;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var contador = 1;
+        if (req.getSession().getAttribute("contador") != null) {
+            contador = (Integer)req.getSession().getAttribute("contador");
+        }
+
+        resp.getWriter().write("Hola "+contador);
+
+        req.getSession().setAttribute("contador", contador+1);
 
 
-        resp.getWriter().write("Hola desde MiServlet"+i);
-        i++;
+
 
     }
 }
