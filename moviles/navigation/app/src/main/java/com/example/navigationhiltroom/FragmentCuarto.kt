@@ -35,7 +35,7 @@ class FragmentCuarto : Fragment() {
         with(binding){
 
             button2.setOnClickListener {
-                val action = FragmentCuartoDirections.actionFragmentCuartoToBlankFragment()
+                val action = FragmentCuartoDirections.actionFragmentCuartoToBlankFragment(10)
                 findNavController().navigate(action)
             }
 

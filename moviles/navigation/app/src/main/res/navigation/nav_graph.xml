@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentPrimero"
-        android:name="com.example.navigationhiltroom.FragmentPrimero"
+        android:name="com.example.navigationhiltroom.ui.primerFragment.FragmentPrimero"
         android:label="fragment_primero"
         tools:layout="@layout/fragment_primero" >
         <action
@@ -48,5 +48,9 @@
         android:id="@+id/blankFragment"
         android:name="com.example.navigationhiltroom.BlankFragment"
         android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" />
+        tools:layout="@layout/fragment_blank" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>
