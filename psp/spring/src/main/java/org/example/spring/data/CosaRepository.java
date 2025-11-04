@@ -50,4 +50,9 @@ public class CosaRepository {
     public boolean delete(int id) {
         return cosas.removeIf(cosa -> cosa.id() == id);
     }
+
+    public List<Cosa> findNameLike(String nombre) {
+
+       return cosas.stream().filter(cosa -> cosa.nombre().contains(nombre)).toList();
+    }
 }

@@ -1,0 +1,70 @@
+###
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+
+{
+  "nombre": "Cosa Nueva",
+  "descripcion": "Descripción de la cosa nueva"
+}
+
+<> 2025-10-29T102554.201.json
+<> 2025-10-29T102529.201.json
+<> 2025-10-29T102504.405.json
+
+###
+GET http://localhost:8080/rest/cosas
+Content-Type: application/json
+
+{
+  "id": 0,
+  "nombre": "",
+  "descripcion": ""
+}
+
+<> 2025-10-29T102758.200.json
+<> 2025-10-29T102603.200.json
+<> 2025-10-29T102546.200.json
+
+###
+PUT http://localhost:8080/rest/cosas/50
+Content-Type: application/json
+
+{
+  "id": 5,
+  "nombre": "",
+  "descripcion": ""
+}
+
+<> 2025-10-29T102749.200.json
+
+###
+GET http://localhost:8080/rest/cosas/filtrar?
+    nombre=1
+
+<> 2025-10-31T104534.200.json
+
+
+###
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+
+{
+  "nombre": "Otra Cosa",
+  "descripcion": "Descripción de otra cosa"
+}
+
+
+###
+PUT http://localhost:8080/rest/cosas/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "nombre": "Cosa Actualizada",
+  "descripcion": "Descripción actualizada de la cosa"
+}
+###
+GET http://localhost:8080/rest/cosas
+
+###
+DELETE http://localhost:8080/rest/cosas/1
