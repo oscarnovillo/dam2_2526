@@ -41,7 +41,7 @@ public class AuthService {
     }
 
     public Long getUsuarioIdFromSession(HttpSession session) {
-        return (Long) session.getAttribute("usuarioId");
+        return ((Usuario) session.getAttribute("usuario")).id();
     }
 
     public String getRolFromSession(HttpSession session) {

@@ -1,8 +1,10 @@
 package org.example.spring.ui.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.example.spring.data.CosaRepository;
 import org.example.spring.domain.model.Cosa;
+import org.example.spring.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +16,20 @@ import java.util.List;
 public class RestCosas {
 
     private final CosaRepository cosaRepository;
+    private final AuthService authService;
 
-    public RestCosas(CosaRepository cosaRepository) {
+    public RestCosas(CosaRepository cosaRepository, AuthService authService) {
         this.cosaRepository = cosaRepository;
+        this.authService = authService;
     }
 
     @GetMapping
-    public List<Cosa> listarCosas() {
-        return cosaRepository.findAll();
+    public ResponseEntity<List<Cosa>> listarCosas(HttpSession session) {
+
+        if (authService.isAuthenticated(session)) {
+            return ResponseEntity.ok(cosaRepository.findAll());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/{id}")
@@ -45,9 +53,17 @@ public class RestCosas {
 
 
     @PostMapping
-    public ResponseEntity<Cosa> crearCosa(@RequestBody Cosa cosa) {
-        Cosa nuevaCosa = cosaRepository.save(cosa);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCosa);
+    public ResponseEntity<Cosa> crearCosa(@RequestBody Cosa cosa,HttpSession session) {
+        if (authService.isAuthenticated(session)) {
+            if (authService.isAdmin(session)) {
+                Cosa nuevaCosa = cosaRepository.save(cosa);
+                return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCosa);
+            }
+            else
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        else
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PutMapping("/{id}")
@@ -60,12 +76,16 @@ public class RestCosas {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCosa(@PathVariable int id) {
-        if (cosaRepository.delete(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> eliminarCosa(@PathVariable int id, HttpSession session) {
+        if (authService.isAuthenticated(session)) {
+            Long userId = authService.getUsuarioIdFromSession(session);
+            if (cosaRepository.delete(id,userId)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 

@@ -15,9 +15,9 @@ public class CosaRepository {
 
     public CosaRepository() {
         this.cosas = new ArrayList<>();
-        cosas.add(new Cosa(1, "Cosa 1", "Descripción de la cosa 1"));
-        cosas.add(new Cosa(2, "Cosa 2", "Descripción de la cosa 2"));
-        cosas.add(new Cosa(3, "Cosa 3", "Descripción de la cosa 3"));
+        cosas.add(new Cosa(1, 1, "Cosa 1", "Descripción de la cosa 1"));
+        cosas.add(new Cosa(2, 1, "Cosa 2", "Descripción de la cosa 2"));
+        cosas.add(new Cosa(3, 2, "Cosa 3", "Descripción de la cosa 3"));
     }
 
     public List<Cosa> findAll() {
@@ -31,7 +31,7 @@ public class CosaRepository {
     }
 
     public Cosa save(Cosa cosa) {
-        Cosa nuevaCosa = new Cosa(nextId++, cosa.nombre(), cosa.descripcion());
+        Cosa nuevaCosa = new Cosa(nextId++, cosa.userId(), cosa.nombre(), cosa.descripcion());
         cosas.add(nuevaCosa);
         return nuevaCosa;
     }
@@ -39,7 +39,7 @@ public class CosaRepository {
     public Optional<Cosa> update(int id, Cosa cosa) {
         for (int i = 0; i < cosas.size(); i++) {
             if (cosas.get(i).id() == id) {
-                Cosa cosaActualizada = new Cosa(id, cosa.nombre(), cosa.descripcion());
+                Cosa cosaActualizada = new Cosa(id, cosa.userId(), cosa.nombre(), cosa.descripcion());
                 cosas.set(i, cosaActualizada);
                 return Optional.of(cosaActualizada);
             }
@@ -47,8 +47,9 @@ public class CosaRepository {
         return Optional.empty();
     }
 
-    public boolean delete(int id) {
-        return cosas.removeIf(cosa -> cosa.id() == id);
+    public boolean delete(int id,Long userId) {
+
+        return cosas.removeIf(cosa -> cosa.id() == id && cosa.userId()==userId);
     }
 
     public List<Cosa> findNameLike(String nombre) {
