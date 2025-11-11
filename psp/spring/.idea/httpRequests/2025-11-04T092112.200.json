@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "usuario": {
+    "rol": "USER",
+    "id": 2,
+    "nombre": "Usuario Test",
+    "username": "user",
+    "email": "user@example.com"
+  },
+  "message": "Login exitoso"
+}

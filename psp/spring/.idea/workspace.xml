@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="spring">
+      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/dao/AlumnoSDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/di/DatabaseModule.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AsignaturaConAlumnos.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/Asigntura.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/RepositoryAlumnos.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/RepositoryAlumnos.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/AppDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AlumnoEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AlumnoEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/domain/usecase/GetAlumnosUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/domain/usecase/GetAlumnosUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/ui/primerFragment/AlumnosViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/ui/primerFragment/AlumnosViewModel.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package-info" />
+        <option value="HTML File" />
+        <option value="Class" />
+        <option value="Record" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="moviles" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-devtools/3.5.7/spring-boot-devtools-3.5.7.jar!/org/springframework/boot/devtools/autoconfigure/OptionalLiveReloadServer.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/6.2.12/spring-web-6.2.12.jar!/org/springframework/http/HttpStatus.class" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="34jVVu9b9QNpZzRFr9FqP9geeUt" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "HTTP Request.generated-requests | #1.executor": "Run",
+    "HTTP Request.generated-requests | #2.executor": "Run",
+    "HTTP Request.generated-requests | #3.executor": "Run",
+    "HTTP Request.generated-requests | #4 (1).executor": "Run",
+    "HTTP Request.generated-requests | #4.executor": "Run",
+    "HTTP Request.generated-requests | #5.executor": "Run",
+    "HTTP Request.generated-requests | #6.executor": "Run",
+    "HTTP Request.generated-requests | #7.executor": "Run",
+    "HTTP Request.generated-requests | #8.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.Application.executor": "Run",
+    "git-widget-placeholder": "moviles",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/oscar/Documents/dam2_2526/psp/spring/src/main/java/org/example/spring/ui",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\oscar\Documents\dam2_2526\psp\spring\src\main\java\org\example\spring\ui" />
+      <recent name="C:\Users\oscar\Documents\dam2_2526\psp\spring\src\main\resources\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\oscar\Documents\dam2_2526\psp\spring\src\test" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.spring.ui.service" />
+      <recent name="org.example.spring.ui.controller" />
+      <recent name="org.example.spring.ui.config" />
+      <recent name="org.example.spring.domain.model" />
+      <recent name="org.example.spring.data" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.Application">
+    <configuration name="generated-requests | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#2" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #5" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/test/generated-requests.http" executionIdentifier="#5" index="5" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #6" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/test/generated-requests.http" executionIdentifier="#6" index="6" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #7" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/test/generated-requests.http" executionIdentifier="#7" index="7" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #8" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/test/generated-requests.http" executionIdentifier="#8" index="8" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="spring" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.spring.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.generated-requests | #2" />
+        <item itemvalue="HTTP Request.generated-requests | #7" />
+        <item itemvalue="HTTP Request.generated-requests | #8" />
+        <item itemvalue="HTTP Request.generated-requests | #6" />
+        <item itemvalue="HTTP Request.generated-requests | #5" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="" />
+      <created>1761726995400</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761726995400</updated>
+      <workItem from="1761726996140" duration="3236000" />
+      <workItem from="1761902780727" duration="2717000" />
+      <workItem from="1762241584888" duration="3059000" />
+      <workItem from="1762846294665" duration="611000" />
+    </task>
+    <task id="LOCAL-00001" summary="spring">
+      <option name="closed" value="true" />
+      <created>1761727527505</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761727527505</updated>
+    </task>
+    <task id="LOCAL-00002" summary="spring">
+      <option name="closed" value="true" />
+      <created>1761727543135</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761727543135</updated>
+    </task>
+    <task id="LOCAL-00003" summary="spring">
+      <option name="closed" value="true" />
+      <created>1761730231480</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761730231480</updated>
+    </task>
+    <task id="LOCAL-00004" summary="spring">
+      <option name="closed" value="true" />
+      <created>1762244596533</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762244596533</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="spring" />
+    <option name="LAST_COMMIT_MESSAGE" value="spring" />
+  </component>
+</project>

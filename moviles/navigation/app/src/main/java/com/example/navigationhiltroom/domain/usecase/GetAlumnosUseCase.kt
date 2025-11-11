@@ -6,7 +6,7 @@ import jakarta.inject.Inject
 
 class GetAlumnosUseCase @Inject constructor (private val repository: RepositoryAlumnos) {
 
-    operator fun invoke(): List<Alumno> {
+    operator suspend fun invoke(): List<Alumno> {
         return repository.getAlumnos()
     }
 }

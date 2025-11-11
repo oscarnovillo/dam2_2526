@@ -1,22 +1,20 @@
 package com.example.navigationhiltroom.data
 
+import com.example.navigationhiltroom.data.local.dao.AlumnoSDao
+import com.example.navigationhiltroom.data.local.entities.toAlumno
+import com.example.navigationhiltroom.data.local.entities.toAlumnoEntity
 import com.example.navigationhiltroom.domain.model.Alumno
 import jakarta.inject.Inject
 
-class RepositoryAlumnos @Inject constructor() {
+class RepositoryAlumnos @Inject constructor( private val ropaDao: AlumnoSDao) {
 
-    fun getAlumnos(): List<Alumno> {
-        return listOf(
-            Alumno(1, "Juan", "García Pérez", 20),
-            Alumno(2, "María", "López Martínez", 22),
-            Alumno(3, "Pedro", "Sánchez Rodríguez", 21),
-            Alumno(4, "Ana", "Fernández González", 23),
-            Alumno(5, "Luis", "Martín Jiménez", 20),
-            Alumno(6, "Carmen", "Díaz Ruiz", 22),
-            Alumno(7, "José", "Moreno Álvarez", 21),
-            Alumno(8, "Laura", "Muñoz Romero", 20),
-            Alumno(9, "Carlos", "Gómez Torres", 23),
-            Alumno(10, "Elena", "Navarro Gil", 22)
+    suspend fun getAlumnos(): List<Alumno> {
+        return ropaDao.getAllAlumnos().map { it.toAlumno() }
+    }
+
+    suspend fun insertAlumno(alumno: Alumno) {
+        ropaDao.insertUsuario(
+            alumno.toAlumnoEntity()
         )
     }
 }
