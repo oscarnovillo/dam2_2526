@@ -37,7 +37,7 @@ public class AuthService {
     }
 
     public boolean isAuthenticated(HttpSession session) {
-        return session.getAttribute("usuarioId") != null;
+        return session.getAttribute("usuario") != null;
     }
 
     public Long getUsuarioIdFromSession(HttpSession session) {
