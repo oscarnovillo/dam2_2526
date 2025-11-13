@@ -10,5 +10,6 @@ data class Alumno(
     val id: Int,
     val nombre: String,
     val apellidos: String,
-    val edad: Int
+    val edad: Int,
+
 )
