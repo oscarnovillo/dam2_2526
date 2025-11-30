@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragmentPrimero"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="primero"
+        />
+
+    <item
+        android:id="@+id/fragmentCuarto"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="cuarto" />
+</menu>

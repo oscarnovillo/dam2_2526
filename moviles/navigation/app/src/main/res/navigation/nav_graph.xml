@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentPrimero">
+
+    <fragment
+        android:id="@+id/fragmentPrimero"
+        android:name="com.example.navigationhiltroom.ui.primerFragment.FragmentPrimero"
+        android:label="fragment_primero"
+        tools:layout="@layout/fragment_primero" >
+        <action
+            android:id="@+id/action_fragmentPrimero_to_fragmentSegundo"
+            app:destination="@id/fragmentSegundo" />
+        <action
+            android:id="@+id/action_fragmentPrimero_to_fragmentTercero"
+            app:destination="@id/fragmentTercero" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSegundo"
+        android:name="com.example.navigationhiltroom.FragmentSegundo"
+        android:label="fragment_segundo"
+        tools:layout="@layout/fragment_segundo" >
+        <action
+            android:id="@+id/action_fragmentSegundo_to_fragmentTercero"
+            app:destination="@id/fragmentTercero" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentTercero"
+        android:name="com.example.navigationhiltroom.FragmentTercero"
+        android:label="fragment_tercero"
+        tools:layout="@layout/fragment_tercero" >
+        <action
+            android:id="@+id/action_fragmentTercero_to_fragmentPrimero"
+            app:destination="@id/fragmentPrimero" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentCuarto"
+        android:name="com.example.navigationhiltroom.FragmentCuarto"
+        android:label="fragment_cuarto"
+        tools:layout="@layout/fragment_cuarto" >
+        <action
+            android:id="@+id/action_fragmentCuarto_to_blankFragment"
+            app:destination="@id/blankFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.example.navigationhiltroom.BlankFragment"
+        android:label="fragment_blank"
+        tools:layout="@layout/fragment_blank" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

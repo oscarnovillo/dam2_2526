@@ -1,0 +1,249 @@
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 49
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=3C4F753AAB8EF455E81D8EB98581B534
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+<> 2025-11-04T092112.200.json
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 46
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "user",
+  "password": "iioi"
+}
+
+<> 2025-11-04T092046.401.json
+
+###
+
+GET http://localhost:8080/rest/cosas
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-10-31T110350.200.json
+
+###
+
+DELETE http://localhost:8080/rest/cosas/1
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+###
+
+GET http://localhost:8080/rest/cosas
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-10-31T105941.200.json
+
+###
+
+PUT http://localhost:8080/rest/cosas/1
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "id": 1,
+  "nombre": "Cosa Actualizada",
+  "descripcion": "Descripción actualizada de la cosa"
+}
+
+<> 2025-10-31T105920.200.json
+
+###
+
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+Content-Length: 73
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "nombre": "Otra Cosa",
+  "descripcion": "Descripción de otra cosa"
+}
+
+<> 2025-10-31T105247.201.json
+
+###
+
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+Content-Length: 73
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "nombre": "Otra Cosa",
+  "descripcion": "Descripción de otra cosa"
+}
+
+<> 2025-10-31T105239.201.json
+
+###
+
+GET http://localhost:8080/rest/cosas/filtrar?nombre=1
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-10-31T104617.200.json
+
+###
+
+GET http://localhost:8080/rest/cosas/filtrar?nombre=1
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-10-31T104534.200.json
+
+###
+
+PUT http://localhost:8080/rest/cosas/50
+Content-Type: application/json
+Content-Length: 50
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "id": 5,
+  "nombre": "",
+  "descripcion": ""
+}
+
+###
+
+GET http://localhost:8080/rest/cosas
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 50
+
+{
+  "id": 0,
+  "nombre": "",
+  "descripcion": ""
+}
+
+<> 2025-10-29T102758.200.json
+
+###
+
+PUT http://localhost:8080/rest/cosas/5
+Content-Type: application/json
+Content-Length: 51
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "id": 5,
+  "nombre": "",
+  "descripcion": ""
+}
+
+<> 2025-10-29T102749.200.json
+
+###
+
+GET http://localhost:8080/rest/cosas
+Content-Type: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 50
+
+{
+  "id": 0,
+  "nombre": "",
+  "descripcion": ""
+}
+
+<> 2025-10-29T102603.200.json
+
+###
+
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+Content-Length: 78
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "nombre": "Cosa Nueva",
+  "descripcion": "Descripción de la cosa nueva"
+}
+
+<> 2025-10-29T102554.201.json
+
+###
+
+GET http://localhost:8080/rest/cosas
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2025-10-29T102546.200.json
+
+###
+
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+Content-Length: 78
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "nombre": "Cosa Nueva",
+  "descripcion": "Descripción de la cosa nueva"
+}
+
+<> 2025-10-29T102529.201.json
+
+###
+
+POST http://localhost:8080/rest/cosas
+Content-Type: application/json
+Content-Length: 78
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "nombre": "Cosa Nueva",
+  "descripcion": "Descripción de la cosa nueva"
+}
+
+<> 2025-10-29T102504.405.json
+
+###
+
