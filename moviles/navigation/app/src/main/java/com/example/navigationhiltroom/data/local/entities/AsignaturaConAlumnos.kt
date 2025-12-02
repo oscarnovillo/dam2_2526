@@ -9,7 +9,7 @@ data class AsignaturaConAlumnos(
     @Embedded val asignatura: AsignturaEntity,
     @Relation(
         parentColumn = "id",
-        entityColumn = "asignaturaID"
+        entityColumn = "id"
     )
     val ropas: List<AlumnoEntity>
 

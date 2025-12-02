@@ -24,17 +24,23 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
+    buildTypes { debug {
+        // URL para desarrollo (puedes cambiarla si tienes un servidor de pruebas)
+        buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
+    }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // URL para producción
+            buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
         }
     }
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -71,6 +77,18 @@ dependencies {
 
     // Fragment
     implementation(libs.fragment.ktx)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Gson
+    implementation(libs.gson)
+
+    // Coil for image loading
+    implementation(libs.coil)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

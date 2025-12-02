@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentPrimero">
+    app:startDestination="@id/rickMortyListFragment">
 
     <fragment
         android:id="@+id/fragmentPrimero"
@@ -53,4 +53,9 @@
             android:name="id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/rickMortyListFragment"
+        android:name="com.example.navigationhiltroom.ui.fragment.RickMortyListFragment"
+        android:label="fragment_rick_morty_list"
+        tools:layout="@layout/fragment_rick_morty_list" />
 </navigation>

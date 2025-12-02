@@ -11,7 +11,7 @@ import com.example.navigationhiltroom.domain.model.Alumno
         ForeignKey(
             entity = AsignturaEntity::class,
             parentColumns = ["id"],
-            childColumns = ["asignaturaID"],
+            childColumns = ["id"],
             onDelete = ForeignKey.CASCADE
         )
     ]

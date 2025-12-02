@@ -4,9 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.navigationhiltroom.data.local.dao.AlumnoSDao
 import com.example.navigationhiltroom.data.local.entities.AlumnoEntity
+import com.example.navigationhiltroom.data.local.entities.AsignaturaConAlumnos
+import com.example.navigationhiltroom.data.local.entities.AsignturaEntity
 
 @Database(
-    entities = [AlumnoEntity::class],
+    entities = [AlumnoEntity::class, AsignturaEntity::class],
     version = 1,
     exportSchema = false
 )
