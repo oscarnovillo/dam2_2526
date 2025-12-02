@@ -4,6 +4,7 @@ import com.example.navigationhiltroom.data.remote.api.RickMortyApiService
 import com.example.navigationhiltroom.data.remote.entity.RickMortyCharacter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,7 +17,8 @@ class RickMortyRepository @Inject constructor(
         try {
             val response = apiService.getCharacters(page)
             return response.results
-        } catch (e: Exception) {
+        } catch (e: HttpException) {
+
             return emptyList()
         }
     }
