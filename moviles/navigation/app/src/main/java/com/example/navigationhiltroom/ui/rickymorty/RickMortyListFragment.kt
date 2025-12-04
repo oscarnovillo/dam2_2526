@@ -21,6 +21,7 @@ import com.example.navigationhiltroom.ui.viewmodel.RickMortyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class RickMortyListFragment : Fragment() {
 

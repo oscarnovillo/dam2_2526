@@ -23,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RickMortyViewModel @Inject constructor(
     private val repository: RickMortyRepository,
-    private val GetCharactersUseCase: GetRickMortyCharacters,
+    private val getCharactersUseCase: GetRickMortyCharacters,
+
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RickMortyUiState())
@@ -54,7 +55,7 @@ class RickMortyViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading= true) }
 
-            val result = GetCharactersUseCase(page)
+            val result = getCharactersUseCase(page)
             when (result)
             {
                 is NetworkResult.Error -> {
