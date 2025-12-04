@@ -1,6 +1,6 @@
 package com.example.navigationhiltroom.ui.rickymorty
 
-import com.example.navigationhiltroom.data.remote.entity.RickMortyCharacter
+import com.example.navigationhiltroom.domain.model.RickMortyCharacter
 
 // Estado persistente de la pantalla
 data class RickMortyUiState(

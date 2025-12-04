@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.navigationhiltroom.R
-import com.example.navigationhiltroom.data.remote.entity.RickMortyCharacter
+import com.example.navigationhiltroom.domain.model.RickMortyCharacter
 
 import com.example.navigationhiltroom.databinding.ItemRickMortyCharacterBinding
 

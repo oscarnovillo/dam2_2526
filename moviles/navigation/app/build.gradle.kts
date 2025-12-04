@@ -24,10 +24,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes { debug {
-        // URL para desarrollo (puedes cambiarla si tienes un servidor de pruebas)
-        buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
-    }
+    buildTypes {
+        debug {
+            // URL para desarrollo (puedes cambiarla si tienes un servidor de pruebas)
+            buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -38,7 +39,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
         }
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
         buildConfig = true
     }

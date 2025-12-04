@@ -1,22 +1,15 @@
 package com.example.navigationhiltroom.data.remote.api
 
-import com.example.navigationhiltroom.data.remote.entity.RickMortyResponse
+import com.example.navigationhiltroom.domain.model.RickMortyResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 
 interface RickMortyApiService {
 
     @GET("character")
-    suspend fun getCharacters(
-        @Query("page") page: Int = 1
-    ): RickMortyResponse
+    suspend fun getCharacters(@Query("page") page: Int = 1): RickMortyResponse
 
     @GET("character")
     suspend fun searchCharacters(

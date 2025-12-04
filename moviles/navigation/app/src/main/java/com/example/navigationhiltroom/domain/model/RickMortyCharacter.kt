@@ -1,4 +1,4 @@
-package com.example.navigationhiltroom.data.remote.entity
+package com.example.navigationhiltroom.domain.model
 
 
 data class RickMortyCharacter(

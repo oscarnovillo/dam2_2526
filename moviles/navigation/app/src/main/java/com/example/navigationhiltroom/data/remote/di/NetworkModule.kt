@@ -2,6 +2,7 @@ package com.example.navigationhiltroom.data.remote.di
 
 import com.example.navigationhiltroom.BuildConfig
 import com.example.navigationhiltroom.data.remote.api.RickMortyApiService
+import com.example.primerxmlmvvm.data.remote.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +28,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
+                            ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             //.addInterceptor(AuthInterceptor(BuildConfig.API_KEY))

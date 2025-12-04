@@ -2,9 +2,10 @@ package com.example.navigationhiltroom.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigationhiltroom.common.NetworkResult
 import com.example.navigationhiltroom.data.RickMortyRepository
 
-import com.example.navigationhiltroom.data.remote.entity.RickMortyCharacter
+import com.example.navigationhiltroom.domain.usecase.GetRickMortyCharacters
 import com.example.navigationhiltroom.ui.common.UiEvent
 import com.example.navigationhiltroom.ui.rickymorty.RickMortyIntent
 import com.example.navigationhiltroom.ui.rickymorty.RickMortyUiState
@@ -21,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RickMortyViewModel @Inject constructor(
-    private val repository: RickMortyRepository
+    private val repository: RickMortyRepository,
+    private val GetCharactersUseCase: GetRickMortyCharacters,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RickMortyUiState())
@@ -51,7 +53,20 @@ class RickMortyViewModel @Inject constructor(
     private fun loadCharacters(page: Int = 1) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading= true) }
-            _uiState.update { it.copy( characters =repository.getCharacters(page)  , isLoading= false) }
+
+            val result = GetCharactersUseCase(page)
+            when (result)
+            {
+                is NetworkResult.Error -> {
+                    _uiState.update { it.copy( isLoading= false) }
+                    _events.send(UiEvent.ShowSnackbar(result.message ?: "Unknown Error"))
+                }
+                is NetworkResult.Loading -> TODO()
+                is NetworkResult.Success ->
+                    _uiState.update { it.copy( characters = result.data  , isLoading= false) }
+            }
+
+
         }
     }
 
