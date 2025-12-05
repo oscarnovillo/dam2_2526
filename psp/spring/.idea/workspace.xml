@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="spring">
-      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/dao/AlumnoSDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/di/DatabaseModule.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AsignaturaConAlumnos.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/Asigntura.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/RepositoryAlumnos.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/RepositoryAlumnos.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/AppDatabase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AlumnoEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/data/local/entities/AlumnoEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/domain/usecase/GetAlumnosUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/domain/usecase/GetAlumnosUseCase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/ui/primerFragment/AlumnosViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../../moviles/navigation/app/src/main/java/com/example/navigationhiltroom/ui/primerFragment/AlumnosViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +79,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "Spring Boot.Application.executor": "Run",
-    "git-widget-placeholder": "moviles",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/oscar/Documents/dam2_2526/psp/spring/src/main/java/org/example/spring/ui",
     "node.js.detected.package.eslint": "true",

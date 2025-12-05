@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -70,6 +71,9 @@ public class AuthController {
             request.nombre(),
             "USER"
         );
+
+        // Generar código de activación aleatorio
+        String codigoActivacion = UUID.randomUUID().toString();
 
         Usuario usuarioGuardado = usuarioRepository.save(nuevoUsuario);
 
