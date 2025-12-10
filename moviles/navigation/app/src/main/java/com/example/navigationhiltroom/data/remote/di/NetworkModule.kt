@@ -12,7 +12,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
+
+private const val RICK_MORTY = "rickMorty"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,6 +44,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named(RICK_MORTY)
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)  // Ahora usa BuildConfig
@@ -56,7 +60,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRickMortyApiService(retrofit: Retrofit): RickMortyApiService {
+    @Named("jsonPlaceholder")
+    fun provideRetrofitJsonPlaceHolder(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("http://jsonplaceholder.com/api")  // Ahora usa BuildConfig
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+
+//            .converterFactories {
+//                add(GsonConverterFactory.create())
+//            }
+
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRickMortyApiService(@Named(RICK_MORTY) retrofit: Retrofit): RickMortyApiService {
         return retrofit.create(RickMortyApiService::class.java)
     }
 }
