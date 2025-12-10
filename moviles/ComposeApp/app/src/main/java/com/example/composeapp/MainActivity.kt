@@ -19,14 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composeapp.ui.theme.ComposeAppTheme
+import com.example.composeapp.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,47 +59,12 @@ data class Usuario(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserFormScreen(modifier: Modifier = Modifier) {
-    var usuarios by remember { mutableStateOf(mutableListOf<Usuario>()) }
-    var usuarioActual by remember { mutableStateOf(Usuario()) }
-    var indiceActual by remember { mutableStateOf(-1) }
-
-    // Estados para los campos del formulario
-    var nombre by remember { mutableStateOf("") }
-    var apellidos by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-    var generoSeleccionado by remember { mutableStateOf("") }
-    var comentarios by remember { mutableStateOf("") }
-    var tieneTV by remember { mutableStateOf(false) }
-
+fun UserFormScreen(
+    modifier: Modifier = Modifier,
+    viewModel: UserViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-    // Función para cargar un usuario en el formulario
-    fun cargarUsuario(usuario: Usuario) {
-        nombre = usuario.nombre
-        apellidos = usuario.apellidos
-        telefono = usuario.telefono
-        email = usuario.email
-        fechaNacimiento = usuario.fechaNacimiento
-        generoSeleccionado = usuario.genero
-        comentarios = usuario.comentarios
-        tieneTV = usuario.tieneTV
-    }
-
-    // Función para limpiar el formulario
-    fun limpiarFormulario() {
-        nombre = ""
-        apellidos = ""
-        telefono = ""
-        email = ""
-        fechaNacimiento = ""
-        generoSeleccionado = ""
-        comentarios = ""
-        tieneTV = false
-        indiceActual = -1
-    }
 
     Column(
         modifier = modifier
@@ -122,8 +92,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
-                value = nombre,
-                onValueChange = { nombre = it },
+                value = uiState.nombre,
+                onValueChange = { viewModel.updateNombre(it) },
                 label = { Text("Nombre") },
                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                 singleLine = true,
@@ -135,8 +105,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Checkbox(
-                    checked = tieneTV,
-                    onCheckedChange = { tieneTV = it }
+                    checked = uiState.tieneTV,
+                    onCheckedChange = { viewModel.updateTieneTV(it) }
                 )
                 Text("¿TV?", fontSize = 14.sp)
             }
@@ -150,8 +120,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedTextField(
-                value = apellidos,
-                onValueChange = { apellidos = it },
+                value = uiState.apellidos,
+                onValueChange = { viewModel.updateApellidos(it) },
                 label = { Text("Apellidos") },
                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                 singleLine = true,
@@ -159,8 +129,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             )
 
             OutlinedTextField(
-                value = telefono,
-                onValueChange = { telefono = it },
+                value = uiState.telefono,
+                onValueChange = { viewModel.updateTelefono(it) },
                 label = { Text("Teléfono") },
                 leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
                 singleLine = true,
@@ -176,8 +146,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = uiState.email,
+                onValueChange = { viewModel.updateEmail(it) },
                 label = { Text("Email") },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
                 singleLine = true,
@@ -185,7 +155,7 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             )
 
             OutlinedTextField(
-                value = fechaNacimiento,
+                value = uiState.fechaNacimiento,
                 onValueChange = { },
                 label = { Text("Fecha Nac.") },
                 leadingIcon = { Icon(Icons.Default.DateRange, contentDescription = null) },
@@ -198,7 +168,7 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
                         DatePickerDialog(
                             context,
                             { _, year, month, day ->
-                                fechaNacimiento = "$day/${month + 1}/$year"
+                                viewModel.updateFechaNacimiento("$day/${month + 1}/$year")
                             },
                             calendar.get(Calendar.YEAR),
                             calendar.get(Calendar.MONTH),
@@ -228,24 +198,24 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = generoSeleccionado == "M",
-                        onClick = { generoSeleccionado = "M" }
+                        selected = uiState.generoSeleccionado == "M",
+                        onClick = { viewModel.updateGenero("M") }
                     )
                     Text("M", modifier = Modifier.padding(end = 8.dp))
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = generoSeleccionado == "F",
-                        onClick = { generoSeleccionado = "F" }
+                        selected = uiState.generoSeleccionado == "F",
+                        onClick = { viewModel.updateGenero("F") }
                     )
                     Text("F", modifier = Modifier.padding(end = 8.dp))
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = generoSeleccionado == "Otro",
-                        onClick = { generoSeleccionado = "Otro" }
+                        selected = uiState.generoSeleccionado == "Otro",
+                        onClick = { viewModel.updateGenero("Otro") }
                     )
                     Text("Otro")
                 }
@@ -256,8 +226,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
 
         // Comentarios
         OutlinedTextField(
-            value = comentarios,
-            onValueChange = { comentarios = it },
+            value = uiState.comentarios,
+            onValueChange = { viewModel.updateComentarios(it) },
             label = { Text("Comentarios") },
             leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
             modifier = Modifier
@@ -275,13 +245,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = {
-                    if (indiceActual > 0) {
-                        indiceActual--
-                        cargarUsuario(usuarios[indiceActual])
-                    }
-                },
-                enabled = indiceActual > 0,
+                onClick = { viewModel.navegarAnterior() },
+                enabled = uiState.indiceActual > 0,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0099CC)),
                 modifier = Modifier
                     .weight(1f)
@@ -292,7 +257,7 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             }
 
             Text(
-                text = if (usuarios.isEmpty()) "0/0" else "${indiceActual + 1}/${usuarios.size}",
+                text = if (uiState.usuarios.isEmpty()) "0/0" else "${uiState.indiceActual + 1}/${uiState.usuarios.size}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -302,13 +267,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
             )
 
             Button(
-                onClick = {
-                    if (indiceActual < usuarios.size - 1) {
-                        indiceActual++
-                        cargarUsuario(usuarios[indiceActual])
-                    }
-                },
-                enabled = indiceActual < usuarios.size - 1,
+                onClick = { viewModel.navegarSiguiente() },
+                enabled = uiState.indiceActual < uiState.usuarios.size - 1,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0099CC)),
                 modifier = Modifier
                     .weight(1f)
@@ -328,7 +288,7 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
         ) {
             // Limpiar
             Button(
-                onClick = { limpiarFormulario() },
+                onClick = { viewModel.limpiarFormulario() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
                 modifier = Modifier
                     .weight(1f)
@@ -339,15 +299,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
 
             // Actualizar
             Button(
-                onClick = {
-                    if (indiceActual >= 0 && indiceActual < usuarios.size) {
-                        usuarios[indiceActual] = Usuario(
-                            nombre, apellidos, telefono, email,
-                            fechaNacimiento, generoSeleccionado, comentarios, tieneTV
-                        )
-                    }
-                },
-                enabled = indiceActual >= 0,
+                onClick = { viewModel.actualizarUsuario() },
+                enabled = uiState.indiceActual >= 0,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8800)),
                 modifier = Modifier
                     .weight(1f)
@@ -358,22 +311,8 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
 
             // Borrar
             Button(
-                onClick = {
-                    if (indiceActual >= 0 && indiceActual < usuarios.size) {
-                        usuarios.removeAt(indiceActual)
-                        if (usuarios.isEmpty()) {
-                            limpiarFormulario()
-                        } else {
-                            if (indiceActual >= usuarios.size) {
-                                indiceActual = usuarios.size - 1
-                            }
-                            if (indiceActual >= 0) {
-                                cargarUsuario(usuarios[indiceActual])
-                            }
-                        }
-                    }
-                },
-                enabled = indiceActual >= 0,
+                onClick = { viewModel.borrarUsuario() },
+                enabled = uiState.indiceActual >= 0,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCC0000)),
                 modifier = Modifier
                     .weight(1f)
@@ -384,15 +323,7 @@ fun UserFormScreen(modifier: Modifier = Modifier) {
 
             // Guardar
             Button(
-                onClick = {
-                    val nuevoUsuario = Usuario(
-                        nombre, apellidos, telefono, email,
-                        fechaNacimiento, generoSeleccionado, comentarios, tieneTV
-                    )
-                    usuarios.add(nuevoUsuario)
-                    indiceActual = usuarios.size - 1
-                    limpiarFormulario()
-                },
+                onClick = { viewModel.guardarUsuario() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF669900)),
                 modifier = Modifier
                     .weight(1f)
@@ -411,3 +342,4 @@ fun UserFormScreenPreview() {
         UserFormScreen()
     }
 }
+
