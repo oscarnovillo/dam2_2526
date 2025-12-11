@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.composeapp.ui.theme.ComposeAppTheme
+import com.example.composeapp.ui.theme.Dimens
 import com.example.composeapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -57,11 +57,10 @@ data class Usuario(
     var tieneTV: Boolean = false
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserFormScreen(
     modifier: Modifier = Modifier,
-    viewModel: UserViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    viewModel: UserViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -70,30 +69,29 @@ fun UserFormScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(horizontal = 20.dp, vertical = 16.dp)
-            .verticalScroll(rememberScrollState())
+            .padding(Dimens.paddingMedium)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
     ) {
         // Título
         Text(
             text = "Añadir Nuevo Usuario",
-            fontSize = 20.sp,
+            fontSize = Dimens.textSizeTitle,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 16.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         // Fila: Campo Nombre + CheckBox TV
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMedium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
-                value = uiState.nombre,
-                onValueChange = { viewModel.updateNombre(it) },
+                value = uiState.usuarioActual.nombre,
+                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(nombre = it)) },
                 label = { Text("Nombre") },
                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                 singleLine = true,
@@ -102,26 +100,25 @@ fun UserFormScreen(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = Dimens.paddingSmall)
             ) {
                 Checkbox(
-                    checked = uiState.tieneTV,
-                    onCheckedChange = { viewModel.updateTieneTV(it) }
+                    checked = uiState.usuarioActual.tieneTV,
+                    onCheckedChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(tieneTV = it)) }
                 )
-                Text("¿TV?", fontSize = 14.sp)
+                Text("¿TV?", fontSize = Dimens.textSizeMedium)
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Fila: Apellidos + Teléfono
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
         ) {
             OutlinedTextField(
-                value = uiState.apellidos,
-                onValueChange = { viewModel.updateApellidos(it) },
+                value = uiState.usuarioActual.apellidos,
+                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(apellidos = it)) },
                 label = { Text("Apellidos") },
                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                 singleLine = true,
@@ -129,8 +126,8 @@ fun UserFormScreen(
             )
 
             OutlinedTextField(
-                value = uiState.telefono,
-                onValueChange = { viewModel.updateTelefono(it) },
+                value = uiState.usuarioActual.telefono,
+                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(telefono = it)) },
                 label = { Text("Teléfono") },
                 leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
                 singleLine = true,
@@ -138,16 +135,15 @@ fun UserFormScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Fila: Email + Fecha Nacimiento
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
         ) {
             OutlinedTextField(
-                value = uiState.email,
-                onValueChange = { viewModel.updateEmail(it) },
+                value = uiState.usuarioActual.email,
+                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(email = it)) },
                 label = { Text("Email") },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
                 singleLine = true,
@@ -155,7 +151,7 @@ fun UserFormScreen(
             )
 
             OutlinedTextField(
-                value = uiState.fechaNacimiento,
+                value = uiState.usuarioActual.fechaNacimiento,
                 onValueChange = { },
                 label = { Text("Fecha Nac.") },
                 leadingIcon = { Icon(Icons.Default.DateRange, contentDescription = null) },
@@ -168,7 +164,7 @@ fun UserFormScreen(
                         DatePickerDialog(
                             context,
                             { _, year, month, day ->
-                                viewModel.updateFechaNacimiento("$day/${month + 1}/$year")
+                                viewModel.updateUsuario(uiState.usuarioActual.copy(fechaNacimiento = "$day/${month + 1}/$year"))
                             },
                             calendar.get(Calendar.YEAR),
                             calendar.get(Calendar.MONTH),
@@ -178,7 +174,6 @@ fun UserFormScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
 
         // Género
         Row(
@@ -187,9 +182,9 @@ fun UserFormScreen(
         ) {
             Text(
                 text = "Género:",
-                fontSize = 14.sp,
+                fontSize = Dimens.textSizeMedium,
                 color = Color.Black,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = Dimens.paddingSmall)
             )
 
             Row(
@@ -198,45 +193,43 @@ fun UserFormScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = uiState.generoSeleccionado == "M",
-                        onClick = { viewModel.updateGenero("M") }
+                        selected = uiState.usuarioActual.genero == "M",
+                        onClick = { viewModel.updateUsuario(uiState.usuarioActual.copy(genero = "M")) }
                     )
-                    Text("M", modifier = Modifier.padding(end = 8.dp))
+                    Text("M", modifier = Modifier.padding(end = Dimens.paddingSmall))
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = uiState.generoSeleccionado == "F",
-                        onClick = { viewModel.updateGenero("F") }
+                        selected = uiState.usuarioActual.genero == "F",
+                        onClick = { viewModel.updateUsuario(uiState.usuarioActual.copy(genero = "F")) }
                     )
-                    Text("F", modifier = Modifier.padding(end = 8.dp))
+                    Text("F", modifier = Modifier.padding(end = Dimens.paddingSmall))
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = uiState.generoSeleccionado == "Otro",
-                        onClick = { viewModel.updateGenero("Otro") }
+                        selected = uiState.usuarioActual.genero == "Otro",
+                        onClick = { viewModel.updateUsuario(uiState.usuarioActual.copy(genero = "Otro")) }
                     )
                     Text("Otro")
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Comentarios
         OutlinedTextField(
-            value = uiState.comentarios,
-            onValueChange = { viewModel.updateComentarios(it) },
+            value = uiState.usuarioActual.comentarios,
+            onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(comentarios = it)) },
             label = { Text("Comentarios") },
             leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp),
+                .height(Dimens.textAreaHeight),
             maxLines = 4
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Botones de navegación
         Row(
@@ -250,19 +243,19 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0099CC)),
                 modifier = Modifier
                     .weight(1f)
-                    .height(40.dp)
-                    .padding(end = 4.dp)
+                    .height(Dimens.buttonHeightSmall)
+                    .padding(end = Dimens.paddingExtraSmall)
             ) {
-                Text("← Ant.", fontSize = 12.sp)
+                Text("← Ant.", fontSize = Dimens.textSizeSmall)
             }
 
             Text(
                 text = if (uiState.usuarios.isEmpty()) "0/0" else "${uiState.indiceActual + 1}/${uiState.usuarios.size}",
-                fontSize = 14.sp,
+                fontSize = Dimens.textSizeMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = Dimens.paddingSmall)
                     .widthIn(min = 40.dp)
             )
 
@@ -272,19 +265,18 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0099CC)),
                 modifier = Modifier
                     .weight(1f)
-                    .height(40.dp)
-                    .padding(start = 4.dp)
+                    .height(Dimens.buttonHeightSmall)
+                    .padding(start = Dimens.paddingExtraSmall)
             ) {
-                Text("Sig. →", fontSize = 12.sp)
+                Text("Sig. →", fontSize = Dimens.textSizeSmall)
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Botones de acción
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
         ) {
             // Limpiar
             Button(
@@ -292,9 +284,9 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp)
+                    .height(Dimens.buttonHeightMedium)
             ) {
-                Text("Limpiar", fontSize = 12.sp)
+                Text("Limpiar", fontSize = Dimens.textSizeSmall)
             }
 
             // Actualizar
@@ -304,9 +296,9 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8800)),
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp)
+                    .height(Dimens.buttonHeightMedium)
             ) {
-                Text("Actualizar", fontSize = 12.sp)
+                Text("Actualizar", fontSize = Dimens.textSizeSmall)
             }
 
             // Borrar
@@ -316,9 +308,9 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCC0000)),
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp)
+                    .height(Dimens.buttonHeightMedium)
             ) {
-                Text("Borrar", fontSize = 12.sp)
+                Text("Borrar", fontSize = Dimens.textSizeSmall)
             }
 
             // Guardar
@@ -327,9 +319,9 @@ fun UserFormScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF669900)),
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp)
+                    .height(Dimens.buttonHeightMedium)
             ) {
-                Text("Guardar", fontSize = 12.sp)
+                Text("Guardar", fontSize = Dimens.textSizeSmall)
             }
         }
     }

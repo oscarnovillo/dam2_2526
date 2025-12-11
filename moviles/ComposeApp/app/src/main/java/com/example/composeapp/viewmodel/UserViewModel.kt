@@ -14,14 +14,7 @@ import javax.inject.Inject
 data class UserFormState(
     val usuarios: List<Usuario> = emptyList(),
     val indiceActual: Int = -1,
-    val nombre: String = "",
-    val apellidos: String = "",
-    val telefono: String = "",
-    val email: String = "",
-    val fechaNacimiento: String = "",
-    val generoSeleccionado: String = "",
-    val comentarios: String = "",
-    val tieneTV: Boolean = false
+    val usuarioActual: Usuario = Usuario()
 )
 
 @HiltViewModel
@@ -30,36 +23,8 @@ class UserViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(UserFormState())
     val uiState: StateFlow<UserFormState> = _uiState.asStateFlow()
 
-    fun updateNombre(nombre: String) {
-        _uiState.update { it.copy(nombre = nombre) }
-    }
-
-    fun updateApellidos(apellidos: String) {
-        _uiState.update { it.copy(apellidos = apellidos) }
-    }
-
-    fun updateTelefono(telefono: String) {
-        _uiState.update { it.copy(telefono = telefono) }
-    }
-
-    fun updateEmail(email: String) {
-        _uiState.update { it.copy(email = email) }
-    }
-
-    fun updateFechaNacimiento(fecha: String) {
-        _uiState.update { it.copy(fechaNacimiento = fecha) }
-    }
-
-    fun updateGenero(genero: String) {
-        _uiState.update { it.copy(generoSeleccionado = genero) }
-    }
-
-    fun updateComentarios(comentarios: String) {
-        _uiState.update { it.copy(comentarios = comentarios) }
-    }
-
-    fun updateTieneTV(tieneTV: Boolean) {
-        _uiState.update { it.copy(tieneTV = tieneTV) }
+    fun updateUsuario(usuario: Usuario) {
+        _uiState.update { it.copy(usuarioActual = usuario) }
     }
 
     fun cargarUsuario(indice: Int) {
@@ -70,14 +35,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
                 _uiState.update {
                     it.copy(
                         indiceActual = indice,
-                        nombre = usuario.nombre,
-                        apellidos = usuario.apellidos,
-                        telefono = usuario.telefono,
-                        email = usuario.email,
-                        fechaNacimiento = usuario.fechaNacimiento,
-                        generoSeleccionado = usuario.genero,
-                        comentarios = usuario.comentarios,
-                        tieneTV = usuario.tieneTV
+                        usuarioActual = usuario.copy()
                     )
                 }
             }
@@ -87,14 +45,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
     fun limpiarFormulario() {
         _uiState.update {
             it.copy(
-                nombre = "",
-                apellidos = "",
-                telefono = "",
-                email = "",
-                fechaNacimiento = "",
-                generoSeleccionado = "",
-                comentarios = "",
-                tieneTV = false,
+                usuarioActual = Usuario(),
                 indiceActual = -1
             )
         }
@@ -103,16 +54,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
     fun guardarUsuario() {
         viewModelScope.launch {
             val state = _uiState.value
-            val nuevoUsuario = Usuario(
-                nombre = state.nombre,
-                apellidos = state.apellidos,
-                telefono = state.telefono,
-                email = state.email,
-                fechaNacimiento = state.fechaNacimiento,
-                genero = state.generoSeleccionado,
-                comentarios = state.comentarios,
-                tieneTV = state.tieneTV
-            )
+            val nuevoUsuario = state.usuarioActual.copy()
 
             val nuevaLista = state.usuarios.toMutableList().apply {
                 add(nuevoUsuario)
@@ -133,16 +75,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             val state = _uiState.value
             if (state.indiceActual >= 0 && state.indiceActual < state.usuarios.size) {
-                val usuarioActualizado = Usuario(
-                    nombre = state.nombre,
-                    apellidos = state.apellidos,
-                    telefono = state.telefono,
-                    email = state.email,
-                    fechaNacimiento = state.fechaNacimiento,
-                    genero = state.generoSeleccionado,
-                    comentarios = state.comentarios,
-                    tieneTV = state.tieneTV
-                )
+                val usuarioActualizado = state.usuarioActual.copy()
 
                 val nuevaLista = state.usuarios.toMutableList().apply {
                     set(state.indiceActual, usuarioActualizado)
@@ -168,14 +101,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
                         it.copy(
                             usuarios = nuevaLista,
                             indiceActual = -1,
-                            nombre = "",
-                            apellidos = "",
-                            telefono = "",
-                            email = "",
-                            fechaNacimiento = "",
-                            generoSeleccionado = "",
-                            comentarios = "",
-                            tieneTV = false
+                            usuarioActual = Usuario()
                         )
                     }
                 } else {
