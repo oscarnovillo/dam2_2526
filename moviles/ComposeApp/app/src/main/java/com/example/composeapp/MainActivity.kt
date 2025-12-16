@@ -22,8 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.composeapp.ui.theme.ComposeAppTheme
 import com.example.composeapp.ui.theme.Dimens
@@ -64,15 +66,40 @@ fun UserFormScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(Dimens.paddingMedium)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
-    ) {
+    // Observar eventos de un solo uso con lifecycle awareness
+    LaunchedEffect(snackbarHostState, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.uiEvent.collect { event ->
+                when (event) {
+                    is com.example.composeapp.viewmodel.UiEvent.ShowSnackbar -> {
+                        snackbarHostState.showSnackbar(
+                            message = event.message,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                    is com.example.composeapp.viewmodel.UiEvent.Navigate -> {
+                        // Aquí puedes manejar navegación si es necesario
+                    }
+                }
+            }
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(paddingValues)
+                .padding(Dimens.paddingMedium)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
+        ) {
         // Título
         Text(
             text = "Añadir Nuevo Usuario",
@@ -112,28 +139,12 @@ fun UserFormScreen(
 
 
         // Fila: Apellidos + Teléfono
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
-        ) {
-            OutlinedTextField(
-                value = uiState.usuarioActual.apellidos,
-                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(apellidos = it)) },
-                label = { Text("Apellidos") },
-                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
-                singleLine = true,
-                modifier = Modifier.weight(1f)
-            )
-
-            OutlinedTextField(
-                value = uiState.usuarioActual.telefono,
-                onValueChange = { viewModel.updateUsuario(uiState.usuarioActual.copy(telefono = it)) },
-                label = { Text("Teléfono") },
-                leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
-                singleLine = true,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        ApellidosTelefono(
+            apellidos = uiState.usuarioActual.apellidos,
+            telefono = uiState.usuarioActual.telefono,
+            onApellidosChange = { viewModel.updateUsuario(Usuario(apellidos = it)) },
+            onTelefonoChange = { viewModel.updateUsuario(Usuario(telefono = it)) },
+        )
 
 
         // Fila: Email + Fecha Nacimiento
@@ -324,6 +335,38 @@ fun UserFormScreen(
                 Text("Guardar", fontSize = Dimens.textSizeSmall)
             }
         }
+        }
+    }
+}
+
+@Composable
+private fun ApellidosTelefono(
+    apellidos: String,
+    telefono: String,
+    onApellidosChange: (String) -> Unit,
+    onTelefonoChange: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
+    ) {
+        OutlinedTextField(
+            value = apellidos,
+            onValueChange = onApellidosChange,
+            label = { Text("Apellidos") },
+            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier.weight(1f)
+        )
+
+        OutlinedTextField(
+            value = telefono,
+            onValueChange = onTelefonoChange,
+            label = { Text("Teléfono") },
+            leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 

@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="registro interceptor">
-      <change afterPath="$PROJECT_DIR$/2FA_FLUJO_VISUAL.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2FA_TOTP_README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/dto/Confirm2FARequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/dto/Enable2FARequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/dto/Enable2FAResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/dto/Verify2FARequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/service/TotpService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/spring/domain/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/domain/model/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/spring/ui/controller/AuthController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +85,7 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "Spring Boot.Application.executor": "Run",
@@ -163,8 +154,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
@@ -182,6 +173,7 @@
       <workItem from="1765265306234" duration="105000" />
       <workItem from="1765265463605" duration="2101000" />
       <workItem from="1765738868836" duration="1119000" />
+      <workItem from="1765794286036" duration="4693000" />
     </task>
     <task id="LOCAL-00001" summary="spring">
       <option name="closed" value="true" />
