@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -27,6 +29,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.window.core.layout.WindowSizeClass
 import com.example.composeapp.ui.componentes.BotonesActtion
 import com.example.composeapp.ui.theme.ComposeAppTheme
 import com.example.composeapp.ui.theme.Dimens
@@ -127,6 +130,11 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                    ) {
     var context = LocalContext.current
 
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+
+
+
+
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -139,7 +147,10 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
         ) {
-
+            if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND))
+            {
+                Text(text="TABLET")
+            }
             // Título
             Text(
                 text = "Añadir Nuevo Usuario",
@@ -397,6 +408,18 @@ fun UserFormScreenPreview() {
         ),1,Usuario(nombre="Juan")
 
             ))
+
+    }
+}
+@Preview(showBackground = true,device = TABLET)
+@Composable
+fun UserFormScreenPreviewTablet() {
+    ComposeAppTheme {
+        UserFormScreen(uiState = UserFormState(listOf(
+            Usuario()
+        ),1,Usuario(nombre="Juan")
+
+        ))
 
     }
 }
