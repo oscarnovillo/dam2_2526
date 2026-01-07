@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,11 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.window.core.layout.WindowSizeClass
 import com.example.composeapp.ui.theme.ComposeAppTheme
 import com.example.composeapp.ui.theme.Dimens
 import com.example.composeapp.viewmodel.UserViewModel
@@ -38,7 +42,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    contentWindowInsets = WindowInsets.statusBars) { innerPadding ->
                     UserFormScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -65,6 +70,9 @@ fun UserFormScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -73,6 +81,11 @@ fun UserFormScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
     ) {
+        if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND))
+        {
+            Text(text="TABLET")
+        }
+
         // Título
         Text(
             text = "Añadir Nuevo Usuario",
@@ -327,9 +340,17 @@ fun UserFormScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun UserFormScreenPreview() {
+    ComposeAppTheme {
+        UserFormScreen()
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true,device = TABLET)
+@Composable
+fun UserFormScreenPreviewWide() {
     ComposeAppTheme {
         UserFormScreen()
     }
