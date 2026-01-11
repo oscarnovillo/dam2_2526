@@ -1,23 +1,13 @@
 package org.example.spring.ui.controller;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import org.example.spring.ui.service.JwtService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/loginToken")
 public class JWTController {
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     public JWTController(JwtService jwtService) {
         this.jwtService = jwtService;
@@ -39,11 +29,14 @@ public class JWTController {
 
 
     @GetMapping("/validate")
-    public String validateToken(@RequestParam String token){
+    public String validateToken(@RequestHeader("Authorization") String authHeader){
 
-       jwtService.isTokenValid(token, "oscar");
-       System.out.println(jwtService.extractRol(token));
-       return jwtService.extractUsername(token);
+        // Extraer el token del formato "Bearer <token>"
+        String token = authHeader.substring(7); // Eliminar "Bearer "
+
+        jwtService.isTokenValid(token, "oscar");
+        System.out.println(jwtService.extractRol(token));
+        return jwtService.extractUsername(token);
     }
 
 

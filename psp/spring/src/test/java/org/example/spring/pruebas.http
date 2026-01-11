@@ -27,6 +27,7 @@ GET http://localhost:8080/loginToken?nombre=oscar&password=1234
 
 ###
 
-# Test JWTController - Validar token JWT
-GET http://localhost:8080/loginToken/validate?token={{jwtToken}}
+# Test JWTController - Validar token JWT con cabecera Bearer
+GET http://localhost:8080/loginToken/validate
+Authorization: Bearer {{jwtToken}}
 
