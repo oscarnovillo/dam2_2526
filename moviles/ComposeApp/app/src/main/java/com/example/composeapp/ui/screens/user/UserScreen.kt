@@ -1,20 +1,40 @@
-package com.example.composeapp
+package com.example.composeapp.ui.screens.user
 
 import android.app.DatePickerDialog
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,45 +44,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.window.core.layout.WindowSizeClass
+import com.example.composeapp.domain.model.Usuario
+import com.example.composeapp.ui.common.UiEvent
+
 import com.example.composeapp.ui.componentes.BotonesActtion
 import com.example.composeapp.ui.theme.ComposeAppTheme
 import com.example.composeapp.ui.theme.Dimens
-import com.example.composeapp.viewmodel.UserFormState
-import com.example.composeapp.viewmodel.UserViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ComposeAppTheme {
-
-                    UserFormScreenViewModel()
-
-            }
-        }
-    }
-}
-
-data class Usuario(
-    var nombre: String = "",
-    var apellidos: String = "",
-    var telefono: String = "",
-    var email: String = "",
-    var fechaNacimiento: String = "",
-    var genero: String = "",
-    var comentarios: String = "",
-    var tieneTV: Boolean = false
-)
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 
 @Composable
@@ -77,16 +73,19 @@ fun UserFormScreenViewModel(
     // Observar eventos de un solo uso con lifecycle awareness
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.uiEvent.collect { event ->
-                when (event) {
-                    is com.example.composeapp.viewmodel.UiEvent.ShowSnackbar -> {
-                        snackbarHostState.showSnackbar(
-                            message = event.message,
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-                    is com.example.composeapp.viewmodel.UiEvent.Navigate -> {
-                        // Aquí puedes manejar navegación si es necesario
+            withContext(Dispatchers.Main.immediate) {
+                viewModel.uiEvent.collect { event ->
+                    when (event) {
+                        is UiEvent.ShowSnackbar -> {
+                            snackbarHostState.showSnackbar(
+                                message = event.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+
+                        is UiEvent.Navigate -> {
+                            // Aquí puedes manejar navegación si es necesario
+                        }
                     }
                 }
             }
@@ -127,7 +126,7 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                    onGuardar: () -> Unit = {},
                    onBorrar: () -> Unit = {},
                    onActualizar: () -> Unit = {},
-                   ) {
+) {
     var context = LocalContext.current
 
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
@@ -374,7 +373,7 @@ private fun ApellidosTelefono(
     onApellidosChange: (String) -> Unit,
     onTelefonoChange: (String) -> Unit,
 
-) {
+    ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
@@ -404,10 +403,10 @@ private fun ApellidosTelefono(
 fun UserFormScreenPreview() {
     ComposeAppTheme {
         UserFormScreen(uiState = UserFormState(listOf(
-    Usuario()
+            Usuario()
         ),1,Usuario(nombre="Juan")
 
-            ))
+        ))
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.composeapp.util
+package com.example.composeapp.ui.common
 
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass

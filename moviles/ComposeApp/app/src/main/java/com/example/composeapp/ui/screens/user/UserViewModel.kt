@@ -1,8 +1,11 @@
-package com.example.composeapp.viewmodel
+package com.example.composeapp.ui.screens.user
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composeapp.Usuario
+
+import com.example.composeapp.domain.model.Usuario
+import com.example.composeapp.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,16 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class UiEvent {
-    data class ShowSnackbar(val message: String) : UiEvent()
-    data class Navigate(val route: String) : UiEvent()
-}
 
-data class UserFormState(
-    val usuarios: List<Usuario> = emptyList(),
-    val indiceActual: Int = -1,
-    val usuarioActual: Usuario = Usuario()
-)
 
 @HiltViewModel
 class UserViewModel @Inject constructor() : ViewModel() {
@@ -78,7 +72,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
                 return@launch
             }
 
-            if (usuario.email.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(usuario.email).matches()) {
+            if (usuario.email.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(usuario.email).matches()) {
                 sendEvent(UiEvent.ShowSnackbar("El email no es válido"))
                 return@launch
             }
@@ -117,7 +111,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
                     return@launch
                 }
 
-                if (usuario.email.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(usuario.email).matches()) {
+                if (usuario.email.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(usuario.email).matches()) {
                     sendEvent(UiEvent.ShowSnackbar("El email no es válido"))
                     return@launch
                 }
