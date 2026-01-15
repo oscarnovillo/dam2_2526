@@ -39,5 +39,12 @@ public class JWTController {
         return jwtService.extractUsername(token);
     }
 
+    @GetMapping("/v")
+    public String validateTokenGET(@RequestParam String token){
 
+
+        jwtService.isTokenValid(token, "oscar");
+        System.out.println(jwtService.extractRol(token));
+        return jwtService.extractUsername(token);
+    }
 }

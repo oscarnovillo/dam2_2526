@@ -38,6 +38,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
         Optional<Usuario> usuario = authService.login(request.username(), request.password(), session);
 
+
         if (usuario.isPresent()) {
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);

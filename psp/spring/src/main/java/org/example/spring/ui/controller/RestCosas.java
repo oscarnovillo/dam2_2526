@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.spring.data.CosaRepository;
 import org.example.spring.domain.model.Cosa;
 import org.example.spring.ui.service.AuthService;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,9 @@ public class RestCosas {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cosa>> listarCosas(HttpSession session) {
+    public ResponseEntity<List<Cosa>> listarCosas(HttpRequest request, HttpSession session) {
 
+        request.getAttributes().get("rol");
         if (authService.isAuthenticated(session)) {
             return ResponseEntity.ok(cosaRepository.findAll());
         }
@@ -34,6 +36,7 @@ public class RestCosas {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cosa> obtenerCosa(@PathVariable int id) {
+
         return cosaRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
