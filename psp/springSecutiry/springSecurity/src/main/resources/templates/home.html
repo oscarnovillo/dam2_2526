@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Security Tutorial - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-public { background-color: #27ae60; color: white; }
+        .btn-private { background-color: #3498db; color: white; }
+        .btn-login { background-color: #9b59b6; color: white; }
+        .btn-logout { background-color: #e74c3c; color: white; }
+        .info { background-color: #ecf0f1; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Tutorial Spring Security</h1>
+        <p>Bienvenido al tutorial de Spring Security. Aquí puedes probar las diferentes URLs:</p>
+
+        <div class="info">
+            <h3>📋 URLs disponibles:</h3>
+            <ul>
+                <li><strong>/public</strong> - Página pública (sin login)</li>
+                <li><strong>/private</strong> - Página privada (requiere login)</li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="/public" class="btn btn-public">🌐 Ir a Página Pública</a>
+            <a href="/private" class="btn btn-private">🔒 Ir a Página Privada</a>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <!-- Mostrar si NO está autenticado -->
+            <div sec:authorize="!isAuthenticated()">
+                <p>No has iniciado sesión.</p>
+                <a href="/login" class="btn btn-login">🔑 Iniciar Sesión</a>
+            </div>
+
+            <!-- Mostrar si está autenticado -->
+            <div sec:authorize="isAuthenticated()">
+                <p>✅ Sesión iniciada como: <strong sec:authentication="name"></strong></p>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-logout">🚪 Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="info" style="margin-top: 30px;">
+            <h3>👤 Usuarios de prueba:</h3>
+            <ul>
+                <li><strong>usuario</strong> / password123 (ROL: USER)</li>
+                <li><strong>admin</strong> / admin123 (ROLES: ADMIN, USER)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+

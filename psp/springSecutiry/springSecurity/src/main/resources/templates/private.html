@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Privada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #3498db; }
+        .alert-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .user-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-home { background-color: #6c757d; color: white; }
+        .btn-public { background-color: #27ae60; color: white; }
+        .btn-logout { background-color: #e74c3c; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Página Privada</h1>
+
+        <div class="alert-info">
+            <strong>✅ Acceso autorizado!</strong>
+            <p>Solo los usuarios autenticados pueden ver esta página.</p>
+        </div>
+
+        <div class="user-info">
+            <h3>👤 Información del usuario:</h3>
+            <ul>
+                <li><strong>Usuario:</strong> <span th:text="${username}"></span></li>
+                <li><strong>Roles:</strong> <span th:text="${roles}"></span></li>
+            </ul>
+        </div>
+
+        <p>¡Felicidades! Has accedido a la zona protegida de la aplicación.</p>
+
+        <!-- Mostrar solo para usuarios con rol ADMIN -->
+        <div sec:authorize="hasRole('ADMIN')">
+            <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <strong>🛡️ Área de Administrador</strong>
+                <p>Este contenido solo es visible para usuarios con rol ADMIN.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/" class="btn btn-home">🏠 Volver al Home</a>
+            <a href="/public" class="btn btn-public">🌐 Ir a Página Pública</a>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-logout">🚪 Cerrar Sesión</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

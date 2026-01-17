@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Pública</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #27ae60; }
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-home { background-color: #6c757d; color: white; }
+        .btn-private { background-color: #3498db; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Página Pública</h1>
+
+        <div class="alert-success">
+            <strong>✅ Acceso permitido!</strong>
+            <p>Esta página es accesible para TODOS, no requiere autenticación.</p>
+        </div>
+
+        <p>Cualquier visitante puede ver esta página sin necesidad de iniciar sesión.</p>
+
+        <!-- Mostrar información si está logueado -->
+        <div sec:authorize="isAuthenticated()">
+            <p>Por cierto, estás logueado como: <strong sec:authentication="name"></strong></p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/" class="btn btn-home">🏠 Volver al Home</a>
+            <a href="/private" class="btn btn-private">🔒 Ir a Página Privada</a>
+        </div>
+    </div>
+</body>
+</html>
+
