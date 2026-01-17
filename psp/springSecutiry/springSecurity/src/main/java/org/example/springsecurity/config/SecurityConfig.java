@@ -2,8 +2,10 @@ package org.example.springsecurity.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,8 +24,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // URLs públicas (sin autenticación)
                 .requestMatchers("/", "/public", "/css/**", "/js/**").permitAll()
+                // API pública
+                .requestMatchers("/api/public").permitAll()
+                // API solo para ADMIN
+                .requestMatchers("/api/admin").hasRole("ADMIN")
                 // URLs protegidas (requieren autenticación)
-                .requestMatchers("/private", "/protected/**").authenticated()
+                .requestMatchers("/private", "/protected/**", "/api/**").authenticated()
                 // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             )
@@ -33,10 +39,24 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/private", true)
                 .permitAll()
             )
+            // Basic Authentication - el navegador muestra popup de login
+            // Útil para APIs REST o pruebas con curl/Postman
+            .httpBasic(Customizer.withDefaults())
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
                 .permitAll()
             );
+
+            // ⚠️ STATELESS - Descomentar para deshabilitar sesiones
+            // Si activas esto, FormLogin NO funcionará correctamente
+            // porque cada petición debe enviar credenciales (ideal para APIs REST + JWT)
+            //
+            // .sessionManagement(session -> session
+            //     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            // )
+            // .formLogin(form -> form.disable())  // Desactivar formLogin
+            // .httpBasic(Customizer.withDefaults())  // Solo Basic Auth
+
         return http.build();
     }
 

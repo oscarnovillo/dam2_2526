@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="registro interceptor">
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/controller/HomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/templates/home.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/templates/private.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/templates/public.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/controller/ApiController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/test/resources/api-tests.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/test/resources/http-client.env.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

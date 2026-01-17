@@ -1,0 +1,76 @@
+### ============================================
+### API REST - Spring Security Tutorial
+### ============================================
+### Credenciales:
+### - usuario:password123 → dXN1YXJpbzpwYXNzd29yZDEyMw==
+### - admin:admin123 → YWRtaW46YWRtaW4xMjM=
+### ============================================
+
+### -----------------------------------------
+### ENDPOINTS PÚBLICOS (sin autenticación)
+### -----------------------------------------
+
+### Endpoint público - No requiere login
+GET http://localhost:8080/api/public
+Accept: application/json
+
+###
+
+### -----------------------------------------
+### ENDPOINTS PROTEGIDOS (requieren autenticación)
+### -----------------------------------------
+
+### Endpoint privado - Usuario normal
+### Usuario: usuario / password123
+GET http://localhost:8080/api/private
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### -----------------------------------------
+### ENDPOINTS SOLO ADMIN
+### -----------------------------------------
+
+### Endpoint admin - Usuario admin
+### Usuario: admin / admin123
+GET http://localhost:8080/api/admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### -----------------------------------------
+### PRUEBAS DE ACCESO DENEGADO
+### -----------------------------------------
+
+### Acceso a /api/private SIN credenciales → 401 Unauthorized
+GET http://localhost:8080/api/private
+Accept: application/json
+
+###
+
+### Usuario normal intentando acceder a /api/admin → 403 Forbidden
+GET http://localhost:8080/api/admin
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### -----------------------------------------
+### ENDPOINTS WEB (HTML)
+### -----------------------------------------
+
+### Página pública
+GET http://localhost:8080/public
+Accept: text/html
+
+###
+
+### Página privada (requiere autenticación)
+GET http://localhost:8080/private
+Accept: text/html
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
