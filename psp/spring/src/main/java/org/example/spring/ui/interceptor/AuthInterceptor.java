@@ -28,6 +28,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
+        request.getHeader("Authorization");
+
+
+        request.setAttribute("rol","admin");
 
         // Verificar si el endpoint está en /api/
         String path = request.getRequestURI();
