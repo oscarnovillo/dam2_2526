@@ -21,7 +21,6 @@ Accept: application/json
 ### -----------------------------------------
 
 ### Endpoint privado - Usuario normal
-### Usuario: usuario / password123
 GET http://localhost:8080/api/private
 Accept: application/json
 Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
@@ -29,12 +28,86 @@ Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
 ###
 
 ### -----------------------------------------
-### ENDPOINTS SOLO ADMIN
+### ENDPOINTS SOLO ADMIN (SecurityConfig)
 ### -----------------------------------------
 
-### Endpoint admin - Usuario admin
-### Usuario: admin / admin123
+### Endpoint admin - Configurado en SecurityConfig con hasRole
 GET http://localhost:8080/api/admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### -----------------------------------------
+### @Secured - Seguridad a nivel de método (simple)
+### -----------------------------------------
+
+### @Secured("ROLE_ADMIN") - Con admin → 200 OK
+GET http://localhost:8080/api/secured-admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### @Secured("ROLE_ADMIN") - Con usuario normal → 403 Forbidden
+GET http://localhost:8080/api/secured-admin
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### -----------------------------------------
+### @PreAuthorize - Se evalúa ANTES del método (SpEL)
+### -----------------------------------------
+
+### @PreAuthorize("hasRole('ADMIN')") - Con admin → 200 OK
+GET http://localhost:8080/api/preauthorize-admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### @PreAuthorize("hasRole('ADMIN') or hasRole('USER')") → 200 OK para ambos
+GET http://localhost:8080/api/preauthorize-complex
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @PreAuthorize con parámetros - Usuario accede a sus propios datos → 200 OK
+GET http://localhost:8080/api/user/usuario
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @PreAuthorize con parámetros - Usuario intenta acceder a datos de otro → 403 Forbidden
+GET http://localhost:8080/api/user/admin
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @PreAuthorize con parámetros - Admin puede acceder a cualquiera → 200 OK
+GET http://localhost:8080/api/user/usuario
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### -----------------------------------------
+### @PostAuthorize - Se evalúa DESPUÉS del método
+### -----------------------------------------
+
+### @PostAuthorize - Usuario "usuario" es owner del recurso → 200 OK
+GET http://localhost:8080/api/postauthorize/123
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @PostAuthorize - Admin puede ver cualquier recurso → 200 OK
+GET http://localhost:8080/api/postauthorize/123
 Accept: application/json
 Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
@@ -44,13 +117,13 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ### PRUEBAS DE ACCESO DENEGADO
 ### -----------------------------------------
 
-### Acceso a /api/private SIN credenciales → 401 Unauthorized
+### Sin credenciales → 401 Unauthorized
 GET http://localhost:8080/api/private
 Accept: application/json
 
 ###
 
-### Usuario normal intentando acceder a /api/admin → 403 Forbidden
+### Usuario normal a endpoint admin → 403 Forbidden
 GET http://localhost:8080/api/admin
 Accept: application/json
 Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
@@ -58,19 +131,86 @@ Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
 ###
 
 ### -----------------------------------------
-### ENDPOINTS WEB (HTML)
+### OPCIÓN 4: ANOTACIONES PERSONALIZADAS
 ### -----------------------------------------
 
-### Página pública
-GET http://localhost:8080/public
-Accept: text/html
+### @IsAdmin - Anotación personalizada (admin) → 200 OK
+GET http://localhost:8080/api/custom-admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 ###
 
-### Página privada (requiere autenticación)
-GET http://localhost:8080/private
-Accept: text/html
+### @IsAdmin - Con usuario normal → 403 Forbidden
+GET http://localhost:8080/api/custom-admin
+Accept: application/json
 Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @IsUser - Anotación personalizada (usuario) → 200 OK
+GET http://localhost:8080/api/custom-user
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @IsAdminOrSelf - Usuario accede a su propio perfil → 200 OK
+GET http://localhost:8080/api/profile/usuario
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @IsAdminOrSelf - Usuario intenta ver perfil de otro → 403 Forbidden
+GET http://localhost:8080/api/profile/admin
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @IsAdminOrSelf - Admin puede ver cualquier perfil → 200 OK
+GET http://localhost:8080/api/profile/usuario
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### -----------------------------------------
+### OPCIÓN 5: JSR-250 (Estándar Java EE)
+### -----------------------------------------
+
+### @RolesAllowed("ADMIN") - Con admin → 200 OK
+GET http://localhost:8080/api/jsr250-admin
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+###
+
+### @RolesAllowed("ADMIN") - Con usuario normal → 403 Forbidden
+GET http://localhost:8080/api/jsr250-admin
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @RolesAllowed({"ADMIN", "USER"}) - Ambos pueden acceder → 200 OK
+GET http://localhost:8080/api/jsr250-multiple
+Accept: application/json
+Authorization: Basic dXN1YXJpbzpwYXNzd29yZDEyMw==
+
+###
+
+### @PermitAll - Sin autenticación → 200 OK
+GET http://localhost:8080/api/jsr250-public
+Accept: application/json
+
+###
+
+### @DenyAll - Siempre denegado, incluso admin → 403 Forbidden
+GET http://localhost:8080/api/jsr250-denied
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 ###
 
