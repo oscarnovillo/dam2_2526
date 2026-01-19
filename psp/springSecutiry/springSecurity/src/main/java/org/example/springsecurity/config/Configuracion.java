@@ -49,6 +49,7 @@ public class Configuracion {
 
     @Bean
     public UserDetailsService userDetailsService() {
+        //return new CustomUserDetailsService(userRepository);
         // Usuario en memoria para pruebas
         UserDetails user = User.builder()
                 .username("usuario")

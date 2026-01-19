@@ -53,7 +53,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Cargar el usuario desde el UserDetailsService
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
+//      UserDetails userDetails = User.builder()
+//              .username(userEmail)
+//              .password("")
+//              .authorities(jwtService.extractAuthorities(jwt)).build();
             // Validar el token
             if (jwtService.isTokenValid(jwt, userDetails)) {
 

@@ -56,6 +56,7 @@ fun MainScaffold() {
             // Tab 1: Login
             composable<Login> {
                 LoginScreen(
+
                     navigateToHome = {
                         // Navegar a Home manteniendo Login en la pila
                         navController.navigate(Home) {

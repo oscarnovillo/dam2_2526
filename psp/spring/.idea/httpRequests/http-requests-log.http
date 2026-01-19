@@ -1,3 +1,24 @@
+GET http://localhost:8080/loginToken/validate
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRoIjoicm9sIiwic3ViIjoib3NjYXIiLCJpYXQiOjE3NjgyMTg2OTIsImV4cCI6MTc2ODMwNTA5Mn0.gmKxB95XrQSJSSdHVpBqsCCeS0e5QC-O9SGu1i3R4l8grL_dvZXt8gLXIG2US2hOpcGdQL8YGAB7qRrz_0BaOQ
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=3C4F753AAB8EF455E81D8EB98581B534
+
+<> 2026-01-12T125138.200.txt
+
+###
+
+GET http://localhost:8080/loginToken?nombre=oscar&password=1234
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=3C4F753AAB8EF455E81D8EB98581B534
+
+<> 2026-01-12T125133.200.txt
+
+###
+
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 Content-Length: 49

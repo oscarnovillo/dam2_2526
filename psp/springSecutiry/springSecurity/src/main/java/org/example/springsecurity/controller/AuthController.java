@@ -45,6 +45,8 @@ public class AuthController {
                 )
         );
 
+
+
         // Obtener el UserDetails
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
 

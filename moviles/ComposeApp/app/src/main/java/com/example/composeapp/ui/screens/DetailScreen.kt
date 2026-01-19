@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun DetailScreen(name: String, navigateBack: () -> Unit) {
+fun DetailScreen(name: String,
+                 navigateBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.weight(1f))
         Text(text = "DETAIL SCREEN $name", fontSize = 25.sp)
