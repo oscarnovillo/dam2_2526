@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="registro interceptor">
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/Configuracion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/dao/RolesEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/dao/UserEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/dao/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/jwt/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/jwt/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/jwt/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/SECURITY_TUTORIAL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/SECURITY_TUTORIAL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/IsAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/IsAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/IsAdminOrSelf.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/security/IsAdminOrSelf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/test/resources/api-tests.http" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/test/resources/api-tests.http" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
