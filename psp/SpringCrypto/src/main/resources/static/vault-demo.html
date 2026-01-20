@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+</html>
+</body>
+    </script>
+        }
+            return bytes;
+            }
+                bytes[i] = binary.charCodeAt(i);
+            for (let i = 0; i < binary.length; i++) {
+            const bytes = new Uint8Array(binary.length);
+            const binary = atob(base64);
+        function base64ToArrayBuffer(base64) {
+
+        }
+            return btoa(binary);
+            }
+                binary += String.fromCharCode(bytes[i]);
+            for (let i = 0; i < bytes.byteLength; i++) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+        function arrayBufferToBase64(buffer) {
+
+        // ========== UTILIDADES ==========
+
+        }
+            }
+                output.innerHTML = `<div class="output"><span class="error">❌ Error: ${error.message}</span></div>`;
+            } catch (error) {
+
+                output.innerHTML = html;
+
+                html += '</ul>';
+                });
+                    `;
+                        </li>
+                            </div>
+                                </button>
+                                    Ver
+                                                document.getElementById('retrievePassword').focus();">
+                                <button onclick="document.getElementById('secretId').value = ${secret.id};
+                            <div>
+                            </div>
+                                <small><em>Título cifrado (usa "Recuperar" para ver)</em></small>
+                                <small>Creado: ${new Date(secret.createdAt).toLocaleString()}</small><br>
+                                <strong>ID:</strong> ${secret.id}<br>
+                            <div>
+                        <li class="secret-item">
+                    html += `
+                secrets.forEach(secret => {
+                let html = '<ul class="secrets-list">';
+
+                }
+                    return;
+                    output.innerHTML = '<div class="output">📭 No tienes secretos guardados</div>';
+                if (secrets.length === 0) {
+
+                const secrets = await response.json();
+
+                if (!response.ok) throw new Error('Error al cargar lista');
+
+                });
+                    }
+                        'X-User-Id': USER_ID
+                    headers: {
+                const response = await fetch(`${API_URL}/secrets`, {
+
+                output.innerHTML = '<div class="output">⏳ Cargando secretos...</div>';
+            try {
+
+            const output = document.getElementById('listOutput');
+        async function listSecrets() {
+         */
+         * Lista todos los secretos del usuario
+        /**
+
+        }
+            }
+                output.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            } catch (error) {
+
+                `;
+                    </div>
+                        ${decrypted}
+                    <div style="background: white; padding: 10px; margin-top: 10px; border-radius: 4px; white-space: pre-wrap;">
+                    <strong>Contenido:</strong><br>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+                    <strong>ID:</strong> ${secret.id}<br>
+                    <strong>Título:</strong> ${title}<br>
+                    <span class="success">✅ Secreto descifrado exitosamente</span><br>
+                output.innerHTML = `
+
+                }
+                    }
+                        // Metadatos no pudieron descifrarse
+                    } catch (e) {
+                        title = metaObj.title;
+                        const metaObj = JSON.parse(metaDecrypted);
+                        const metaDecrypted = await decryptData(metaCiphertext, password, metaIv, metaSalt);
+                        const metaSalt = base64ToArrayBuffer(meta.salt);
+                        const metaIv = base64ToArrayBuffer(meta.iv);
+                        const metaCiphertext = base64ToArrayBuffer(meta.data);
+                        const meta = JSON.parse(secret.metadata);
+                    try {
+                if (secret.metadata) {
+                let title = 'Sin título';
+                // 3. Descifrar el título (si existe)
+
+                const decrypted = await decryptData(ciphertext, password, iv, salt);
+
+                const salt = base64ToArrayBuffer(secret.salt);
+                const iv = base64ToArrayBuffer(secret.iv);
+                const ciphertext = base64ToArrayBuffer(secret.encryptedData);
+                // 2. Descifrar los datos
+
+                const secret = await response.json();
+
+                if (!response.ok) throw new Error('Secreto no encontrado');
+
+                });
+                    }
+                        'X-User-Id': USER_ID
+                    headers: {
+                const response = await fetch(`${API_URL}/secrets/${secretId}`, {
+                // 1. Obtener datos cifrados del servidor
+
+                output.innerHTML = '⏳ Recuperando y descifrando...';
+                output.style.display = 'block';
+            try {
+
+            }
+                return;
+                output.innerHTML = '<span class="error">⚠️ Debes ingresar ID y password</span>';
+                output.style.display = 'block';
+            if (!secretId || !password) {
+
+            const output = document.getElementById('retrieveOutput');
+            const password = document.getElementById('retrievePassword').value;
+            const secretId = document.getElementById('secretId').value;
+        async function retrieveSecret() {
+         */
+         * Recupera y descifra un secreto
+        /**
+
+        }
+            }
+                output.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            } catch (error) {
+
+                document.getElementById('secretTitle').value = '';
+                document.getElementById('secretData').value = '';
+                // Limpiar formulario
+
+                `;
+                    <em>Guarda este ID y tu password para recuperar el secreto</em>
+                    <br>
+                    <strong>Fecha:</strong> ${result.createdAt}<br>
+                    <strong>ID:</strong> ${result.secretId}<br>
+                    <span class="success">✅ Secreto guardado exitosamente</span><br>
+                output.innerHTML = `
+
+                const result = await response.json();
+
+                if (!response.ok) throw new Error('Error al guardar');
+
+                });
+                    })
+                        metadata: encryptedMetadata
+                        salt: arrayBufferToBase64(encrypted.salt),
+                        iv: arrayBufferToBase64(encrypted.iv),
+                        encryptedData: arrayBufferToBase64(encrypted.ciphertext),
+                    body: JSON.stringify({
+                    },
+                        'X-User-Id': USER_ID
+                        'Content-Type': 'application/json',
+                    headers: {
+                    method: 'POST',
+                const response = await fetch(`${API_URL}/secrets`, {
+                // 3. Enviar al servidor
+
+                }
+                    });
+                        salt: arrayBufferToBase64(metaEncrypted.salt)
+                        iv: arrayBufferToBase64(metaEncrypted.iv),
+                        data: arrayBufferToBase64(metaEncrypted.ciphertext),
+                    encryptedMetadata = JSON.stringify({
+                    );
+                        password
+                        JSON.stringify({ title: title }),
+                    const metaEncrypted = await encryptData(
+                if (title) {
+                let encryptedMetadata = null;
+                // 2. Cifrar el título (si existe)
+
+                const encrypted = await encryptData(data, password);
+                // 1. Cifrar los datos
+
+                output.innerHTML = '⏳ Cifrando datos...';
+                output.style.display = 'block';
+            try {
+
+            }
+                return;
+                output.innerHTML = '<span class="error">⚠️ Debes ingresar password y datos</span>';
+                output.style.display = 'block';
+            if (!password || !data) {
+
+            const output = document.getElementById('saveOutput');
+            const title = document.getElementById('secretTitle').value;
+            const data = document.getElementById('secretData').value;
+            const password = document.getElementById('savePassword').value;
+        async function saveSecret() {
+         */
+         * Guarda un secreto cifrado en el servidor
+        /**
+
+        // ========== FUNCIONES DE API ==========
+
+        }
+            }
+                throw new Error('Password incorrecta o datos corruptos');
+            } catch (e) {
+                return decoder.decode(decrypted);
+                const decoder = new TextDecoder();
+
+                );
+                    ciphertext
+                    key,
+                    },
+                        iv: iv
+                        name: 'AES-GCM',
+                    {
+                const decrypted = await crypto.subtle.decrypt(
+            try {
+
+            const key = await deriveKey(password, salt);
+        async function decryptData(ciphertext, password, iv, salt) {
+         */
+         * Descifra datos con AES-256-GCM
+        /**
+
+        }
+            };
+                salt: salt
+                iv: iv,
+                ciphertext: new Uint8Array(encrypted),
+            return {
+
+            );
+                encoder.encode(data)
+                key,
+                },
+                    iv: iv
+                    name: 'AES-GCM',
+                {
+            const encrypted = await crypto.subtle.encrypt(
+            // Cifrar con AES-GCM
+
+            const key = await deriveKey(password, salt);
+            // Derivar clave desde password
+
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            // Generar salt e IV aleatorios
+
+            const encoder = new TextEncoder();
+        async function encryptData(data, password) {
+         */
+         * Cifra datos con AES-256-GCM
+        /**
+
+        }
+            );
+                ['encrypt', 'decrypt']
+                false,
+                },
+                    length: 256  // AES-256
+                    name: 'AES-GCM',
+                {
+                passwordKey,
+                },
+                    hash: 'SHA-256'
+                    iterations: 100000,  // 100k iteraciones
+                    salt: salt,
+                    name: 'PBKDF2',
+                {
+            return await crypto.subtle.deriveKey(
+
+            );
+                ['deriveBits', 'deriveKey']
+                false,
+                'PBKDF2',
+                encoder.encode(password),
+                'raw',
+            const passwordKey = await crypto.subtle.importKey(
+            const encoder = new TextEncoder();
+        async function deriveKey(password, salt) {
+         */
+         * Deriva una clave AES-256 desde una password usando PBKDF2
+        /**
+
+        // ========== FUNCIONES DE CRIPTOGRAFÍA ==========
+
+        const USER_ID = 1; // Mock de autenticación
+        const API_URL = 'http://localhost:8080/api/vault';
+    <script>
+
+    </div>
+        </div>
+            <div id="listOutput" style="margin-top: 15px;"></div>
+            <button onclick="listSecrets()">🔄 Cargar Lista</button>
+            <h2>📋 Mis Secretos</h2>
+        <div class="section">
+        <!-- Sección 3: Listar Secretos -->
+
+        </div>
+            <div id="retrieveOutput" class="output" style="display: none;"></div>
+
+            </div>
+                <button onclick="retrieveSecret()">🔓 Recuperar y Descifrar</button>
+            <div style="margin-top: 15px;">
+
+            <input type="password" id="retrievePassword" placeholder="Tu password">
+            <label for="retrievePassword" style="margin-top: 15px;">Password (para descifrar):</label>
+
+            <input type="number" id="secretId" placeholder="123">
+            <label for="secretId">ID del Secreto:</label>
+            <h2>🔓 Recuperar Secreto</h2>
+        <div class="section">
+        <!-- Sección 2: Recuperar Secreto -->
+
+        </div>
+            <div id="saveOutput" class="output" style="display: none;"></div>
+
+            </div>
+                <button onclick="saveSecret()">🔒 Cifrar y Guardar</button>
+            <div style="margin-top: 15px;">
+
+            <input type="text" id="secretTitle" placeholder="Mi Secreto">
+            <label for="secretTitle" style="margin-top: 15px;">Título (opcional, también se cifrará):</label>
+
+            <textarea id="secretData" placeholder="Escribe tu secreto aquí..."></textarea>
+            <label for="secretData" style="margin-top: 15px;">Datos a guardar:</label>
+
+            <input type="password" id="savePassword" placeholder="Tu password segura">
+            <label for="savePassword">Password (para cifrar):</label>
+            <h2>💾 Guardar Secreto</h2>
+        <div class="section">
+        <!-- Sección 1: Guardar Secreto -->
+
+        </div>
+            Si olvidas tu password, los datos se pierden para siempre.
+            El servidor <strong>NUNCA</strong> tiene acceso a tus datos en claro.
+            <strong>🛡️ Seguridad Total:</strong> Tus datos se cifran en tu navegador con tu password.
+        <div class="info">
+
+        <p class="subtitle">Cifrado Zero-Knowledge con AES-256-GCM en el Cliente</p>
+        <h1>🔐 Vault - Caja Fuerte Segura</h1>
+    <div class="container">
+<body>
+</head>
+    </style>
+        }
+            font-size: 14px;
+            padding: 8px 16px;
+        .secret-item button {
+
+        }
+            align-items: center;
+            justify-content: space-between;
+            display: flex;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            background: #f8f9fa;
+        .secret-item {
+
+        }
+            list-style: none;
+        .secrets-list {
+
+        }
+            color: #667eea;
+        .info strong {
+
+        }
+            border-radius: 4px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            background: #e7f3ff;
+        .info {
+
+        }
+            font-weight: 600;
+            color: #dc3545;
+        .error {
+
+        }
+            font-weight: 600;
+            color: #28a745;
+        .success {
+
+        }
+            overflow-y: auto;
+            max-height: 300px;
+            word-break: break-all;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            background: #f8f9fa;
+        .output {
+
+        }
+            background: #5a6268;
+        button.secondary:hover {
+
+        }
+            background: #6c757d;
+        button.secondary {
+
+        }
+            transform: scale(0.98);
+        button:active {
+
+        }
+            background: #5568d3;
+        button:hover {
+
+        }
+            margin-right: 10px;
+            transition: background 0.3s, transform 0.1s;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 6px;
+            padding: 12px 24px;
+            border: none;
+            color: white;
+            background: #667eea;
+        button {
+
+        }
+            min-height: 100px;
+            resize: vertical;
+        textarea {
+
+        }
+            border-color: #667eea;
+            outline: none;
+        input:focus, textarea:focus {
+
+        }
+            transition: border-color 0.3s;
+            font-family: inherit;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            width: 100%;
+        input, textarea {
+
+        }
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        label {
+
+        }
+            margin-bottom: 30px;
+        .section {
+
+        }
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: #666;
+        .subtitle {
+
+        }
+            margin-bottom: 10px;
+            color: #667eea;
+        h1 {
+
+        }
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            background: white;
+            margin: 0 auto;
+            max-width: 800px;
+        .container {
+
+        }
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body {
+
+        }
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        * {
+    <style>
+    <title>Vault - Caja Fuerte Segura</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+<head>
+<html lang="es">
+

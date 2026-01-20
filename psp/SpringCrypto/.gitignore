@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Cryptography & Security ###
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+secrets/
+keys/
+private/
+.env
+

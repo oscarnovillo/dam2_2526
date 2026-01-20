@@ -1,0 +1,200 @@
+### ========================================
+### VAULT API - Caja Fuerte con Cifrado Zero-Knowledge
+### ========================================
+###
+### IMPORTANTE: Los datos se cifran en el CLIENTE antes de enviarlos
+### al servidor. El servidor NUNCA tiene acceso a los datos en claro.
+###
+### Para probar:
+### 1. Inicia el servidor Spring Boot
+### 2. Abre: http://localhost:8080/vault-demo.html
+### 3. Usa la interfaz web para cifrar/descifrar
+### 4. O ejecuta estas peticiones HTTP directamente
+###
+
+### Variables
+@baseUrl = http://localhost:8080/api/vault
+@userId = 1
+
+### ========================================
+### 1. GUARDAR SECRETO (datos ya cifrados)
+### ========================================
+###
+### Antes de ejecutar esto, debes cifrar tus datos en el cliente:
+###
+### JavaScript (Web Crypto API):
+### const encrypted = await encryptData("Mi secreto", "password123");
+###
+### Resultado esperado:
+### - encryptedData: Base64 del ciphertext
+### - iv: Base64 del IV (12 bytes)
+### - salt: Base64 del salt (16 bytes)
+###
+
+POST {{baseUrl}}/secrets
+Content-Type: application/json
+X-User-Id: {{userId}}
+
+{
+  "encryptedData": "Qk5xZGFGMXNjR3RoYldFPQ==",
+  "iv": "MTIzNDU2Nzg5MDEy",
+  "salt": "MTIzNDU2Nzg5MDEyMzQ1Ng==",
+  "metadata": "{\"encTitle\": \"encrypted_title_here\"}"
+}
+
+### Respuesta esperada:
+### {
+###   "secretId": 1,
+###   "createdAt": "2026-01-20T10:30:00"
+### }
+
+### ========================================
+### 2. RECUPERAR SECRETO POR ID
+### ========================================
+###
+### El servidor devuelve los datos CIFRADOS.
+### Debes descifrarlos en el cliente con la password correcta.
+###
+
+GET {{baseUrl}}/secrets/1
+X-User-Id: {{userId}}
+
+### Respuesta esperada:
+### {
+###   "id": 1,
+###   "encryptedData": "Qk5xZGFGMXNjR3RoYldFPQ==",
+###   "iv": "MTIzNDU2Nzg5MDEy",
+###   "salt": "MTIzNDU2Nzg5MDEyMzQ1Ng==",
+###   "metadata": "{\"encTitle\": \"encrypted_title_here\"}"
+### }
+###
+### Para descifrar en JavaScript:
+### const decrypted = await decryptData(
+###   base64ToArrayBuffer(response.encryptedData),
+###   "password123",
+###   base64ToArrayBuffer(response.iv),
+###   base64ToArrayBuffer(response.salt)
+### );
+
+### ========================================
+### 3. LISTAR TODOS LOS SECRETOS
+### ========================================
+###
+### Devuelve una lista con IDs y metadatos (también cifrados).
+###
+
+GET {{baseUrl}}/secrets
+X-User-Id: {{userId}}
+
+### Respuesta esperada:
+### [
+###   {
+###     "id": 1,
+###     "metadata": "{\"encTitle\": \"encrypted_title_here\"}",
+###     "createdAt": "2026-01-20T10:30:00",
+###     "updatedAt": "2026-01-20T10:30:00"
+###   },
+###   {
+###     "id": 2,
+###     "metadata": "{\"encTitle\": \"another_encrypted_title\"}",
+###     "createdAt": "2026-01-20T11:00:00",
+###     "updatedAt": "2026-01-20T11:00:00"
+###   }
+### ]
+
+### ========================================
+### 4. ACTUALIZAR SECRETO (re-cifrar)
+### ========================================
+###
+### Útil si quieres cambiar la password:
+### 1. Descifra con password antigua en el cliente
+### 2. Re-cifra con password nueva en el cliente
+### 3. Envía los nuevos datos cifrados
+###
+
+PUT {{baseUrl}}/secrets/1
+Content-Type: application/json
+X-User-Id: {{userId}}
+
+{
+  "encryptedData": "TnVldm9EYXRvc0NpZnJhZG9z",
+  "iv": "TnVldm9JVjEyMzQ1Ng==",
+  "salt": "TnVldm9TYWx0MTIzNDU2Nzg5MA==",
+  "metadata": "{\"encTitle\": \"new_encrypted_title\"}"
+}
+
+### ========================================
+### 5. ELIMINAR SECRETO
+### ========================================
+
+DELETE {{baseUrl}}/secrets/1
+X-User-Id: {{userId}}
+
+### Respuesta: 204 No Content
+
+### ========================================
+### EJEMPLO COMPLETO CON CIFRADO EN BASH
+### ========================================
+###
+### Si quieres probar desde línea de comandos, aquí hay un ejemplo
+### usando OpenSSL para cifrar (simula lo que hace el cliente):
+
+### 1. Cifrar datos con AES-256-GCM
+### echo -n "Mi secreto importante" | openssl enc -aes-256-gcm -pbkdf2 -iter 100000 -pass pass:password123 -base64
+
+### 2. Extraer IV y Salt (OpenSSL los incluye en el output)
+### Para enviar al servidor, necesitas separar:
+### - Salt (primero 16 bytes después de "Salted__")
+### - IV (12 bytes aleatorios para GCM)
+### - Ciphertext (resto)
+
+### NOTA: Es más fácil usar el cliente web vault-demo.html para estas pruebas
+
+### ========================================
+### EJEMPLO CON DATOS REALES CIFRADOS
+### ========================================
+###
+### Estos datos fueron cifrados con password: "test123"
+### Puedes descifrarlos en vault-demo.html
+###
+
+POST {{baseUrl}}/secrets
+Content-Type: application/json
+X-User-Id: {{userId}}
+
+{
+  "encryptedData": "5fJ8kL3mN9pQ2rS4tU6vW8xY0zA1bC3dE5fG7hI9jK==",
+  "iv": "aBcDeFgHiJkL",
+  "salt": "mNoPqRsTuVwXyZ01",
+  "metadata": null
+}
+
+### Para descifrar:
+### 1. Abre vault-demo.html
+### 2. Usa el ID devuelto
+### 3. Password: test123
+### 4. Deberías ver el mensaje original
+
+### ========================================
+### SEGURIDAD: ¿Qué pasa si...?
+### ========================================
+###
+### ❓ ¿Un hacker roba la base de datos?
+### ✅ Solo ve datos cifrados. Sin la password del usuario, son inútiles.
+###
+### ❓ ¿Un admin del servidor quiere ver mis datos?
+### ✅ No puede. Los datos se cifran en el cliente, el servidor nunca tiene la clave.
+###
+### ❓ ¿Olvido mi password?
+### ❌ Datos perdidos para siempre. Es el precio de la seguridad zero-knowledge.
+###
+### ❓ ¿Alguien intercepta el tráfico HTTP?
+### ✅ Si usas HTTPS (TLS), los datos van cifrados por partida doble:
+###    1. Cifrado AES del cliente (con tu password)
+###    2. Cifrado TLS del transporte
+###
+### ❓ ¿Se puede hacer fuerza bruta a las passwords?
+### ⚠️ Sí, pero es MUY lento gracias a PBKDF2 con 100,000 iteraciones.
+###    Cada intento tarda ~100ms, haciendo inviable probar millones de passwords.
+###    Usa passwords fuertes: 12+ caracteres, mezcla de mayús/minús/números/símbolos.
+

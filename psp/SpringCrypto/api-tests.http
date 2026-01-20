@@ -1,0 +1,412 @@
+### SpringCrypto API - Tests HTTP
+### Archivo de pruebas para IntelliJ IDEA HTTP Client
+
+### Variables
+@host = http://localhost:8080
+@contentType = application/json
+
+#########################################
+### ENCRIPTACIÓN SIMÉTRICA (AES)
+#########################################
+
+### 1. Generar clave AES aleatoria
+GET {{host}}/api/symmetric/generate-key
+
+### 1b. Generar clave AES desde password
+POST {{host}}/api/symmetric/generate-key-from-password
+Content-Type: {{contentType}}
+
+{
+  "password": "MiPasswordSuperSeguro123!"
+}
+
+> {%
+    client.global.set("password_derived_key", response.body.key);
+%}
+
+### 1c. Obtener clave configurada desde application.properties
+GET {{host}}/api/symmetric/configured-key
+
+> {%
+    client.global.set("configured_key", response.body.key);
+%}
+
+### 1d. Verificar que la misma password genera la misma clave
+POST {{host}}/api/symmetric/generate-key-from-password
+Content-Type: {{contentType}}
+
+{
+  "password": "MiPasswordSuperSeguro123!"
+}
+
+### 1e. Password diferente genera clave diferente
+POST {{host}}/api/symmetric/generate-key-from-password
+Content-Type: {{contentType}}
+
+{
+  "password": "OtraPasswordDiferente456"
+}
+
+### 2. Demo de encriptación simétrica
+GET {{host}}/api/symmetric/demo
+
+### 3. Encriptar con AES-GCM (recomendado)
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Este es mi mensaje secreto con AES-GCM 🔐",
+  "mode": "GCM"
+}
+
+> {%
+    client.global.set("aes_key", response.body.key);
+    client.global.set("aes_encrypted", response.body.encryptedText);
+    client.global.set("aes_mode", response.body.mode);
+%}
+
+### 4. Desencriptar con AES-GCM
+POST {{host}}/api/symmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{aes_encrypted}}",
+  "key": "{{aes_key}}",
+  "mode": "{{aes_mode}}"
+}
+
+### 5. Encriptar con AES-CBC
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje con AES-CBC",
+  "mode": "CBC"
+}
+
+> {%
+    client.global.set("cbc_key", response.body.key);
+    client.global.set("cbc_encrypted", response.body.encryptedText);
+%}
+
+### 6. Desencriptar con AES-CBC
+POST {{host}}/api/symmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{cbc_encrypted}}",
+  "key": "{{cbc_key}}",
+  "mode": "CBC"
+}
+
+### 7. Encriptar con AES-CTR
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje con AES-CTR (modo contador)",
+  "mode": "CTR"
+}
+
+### 8. Encriptar con AES-ECB (NO RECOMENDADO)
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje con AES-ECB (inseguro para producción)",
+  "mode": "ECB"
+}
+
+### 9. Encriptar con clave personalizada
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje con clave personalizada",
+  "mode": "GCM",
+  "key": "{{aes_key}}"
+}
+
+### 9b. Encriptar usando clave derivada de password
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje encriptado con clave derivada de password",
+  "mode": "GCM",
+  "key": "{{password_derived_key}}"
+}
+
+> {%
+    client.global.set("password_encrypted", response.body.encryptedText);
+%}
+
+### 9c. Desencriptar usando la misma clave derivada
+POST {{host}}/api/symmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{password_encrypted}}",
+  "key": "{{password_derived_key}}",
+  "mode": "GCM"
+}
+
+#########################################
+### ENCRIPTACIÓN ASIMÉTRICA (RSA)
+#########################################
+
+### 10. Generar par de claves RSA
+GET {{host}}/api/asymmetric/generate-keypair?algorithm=RSA
+
+> {%
+    client.global.set("rsa_public_key", response.body.publicKey);
+    client.global.set("rsa_private_key", response.body.privateKey);
+%}
+
+### 10b. Generar par de claves EC (Elliptic Curve)
+GET {{host}}/api/asymmetric/generate-keypair?algorithm=EC
+
+> {%
+    client.global.set("ec_public_key", response.body.publicKey);
+    client.global.set("ec_private_key", response.body.privateKey);
+%}
+
+### 11. Demo de encriptación asimétrica
+GET {{host}}/api/asymmetric/demo
+
+### 12. Encriptar con RSA-OAEP (recomendado)
+POST {{host}}/api/asymmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje secreto con RSA-OAEP 🔒",
+  "publicKey": "{{rsa_public_key}}",
+  "padding": "OAEP"
+}
+
+> {%
+    client.global.set("rsa_encrypted", response.body.encryptedText);
+    client.global.set("rsa_padding", response.body.padding);
+%}
+
+### 13. Desencriptar con RSA-OAEP
+POST {{host}}/api/asymmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{rsa_encrypted}}",
+  "privateKey": "{{rsa_private_key}}",
+  "padding": "{{rsa_padding}}"
+}
+
+### 14. Encriptar con RSA-PKCS1
+POST {{host}}/api/asymmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Mensaje con RSA-PKCS1",
+  "publicKey": "{{rsa_public_key}}",
+  "padding": "PKCS1"
+}
+
+> {%
+    client.global.set("rsa_pkcs1_encrypted", response.body.encryptedText);
+%}
+
+### 15. Desencriptar con RSA-PKCS1
+POST {{host}}/api/asymmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{rsa_pkcs1_encrypted}}",
+  "privateKey": "{{rsa_private_key}}",
+  "padding": "PKCS1"
+}
+
+#########################################
+### FIRMA DIGITAL
+#########################################
+
+### 16. Firmar mensaje
+POST {{host}}/api/asymmetric/sign
+Content-Type: {{contentType}}
+
+{
+  "message": "Este es el mensaje que quiero firmar digitalmente",
+  "privateKey": "{{rsa_private_key}}"
+}
+
+> {%
+    client.global.set("signature", response.body.signature);
+%}
+
+### 17. Verificar firma válida
+POST {{host}}/api/asymmetric/verify
+Content-Type: {{contentType}}
+
+{
+  "message": "Este es el mensaje que quiero firmar digitalmente",
+  "signature": "{{signature}}",
+  "publicKey": "{{rsa_public_key}}"
+}
+
+### 18. Verificar firma inválida (mensaje modificado)
+POST {{host}}/api/asymmetric/verify
+Content-Type: {{contentType}}
+
+{
+  "message": "Este es el mensaje MODIFICADO",
+  "signature": "{{signature}}",
+  "publicKey": "{{rsa_public_key}}"
+}
+
+#########################################
+### FIRMA DIGITAL CON EC (ECDSA)
+#########################################
+
+### 18b. Firmar mensaje con ECDSA
+POST {{host}}/api/asymmetric/sign
+Content-Type: {{contentType}}
+
+{
+  "message": "Mensaje firmado con curva elíptica ECDSA",
+  "privateKey": "{{ec_private_key}}"
+}
+
+> {%
+    client.global.set("ec_signature", response.body.signature);
+%}
+
+### 18c. Verificar firma ECDSA válida
+POST {{host}}/api/asymmetric/verify
+Content-Type: {{contentType}}
+
+{
+  "message": "Mensaje firmado con curva elíptica ECDSA",
+  "signature": "{{ec_signature}}",
+  "publicKey": "{{ec_public_key}}"
+}
+
+### 18d. Verificar firma ECDSA inválida
+POST {{host}}/api/asymmetric/verify
+Content-Type: {{contentType}}
+
+{
+  "message": "Mensaje MODIFICADO",
+  "signature": "{{ec_signature}}",
+  "publicKey": "{{ec_public_key}}"
+}
+
+### 18e. Comparar tamaño de firmas RSA vs ECDSA
+# Las firmas ECDSA son mucho más pequeñas que RSA
+# RSA-2048: ~256 bytes
+# ECDSA P-256: ~70-72 bytes
+GET {{host}}/api/asymmetric/demo
+
+#########################################
+### ENCRIPTACIÓN HÍBRIDA (RSA + AES)
+#########################################
+
+### 19. Encriptar mensaje largo con modo híbrido
+POST {{host}}/api/asymmetric/encrypt-hybrid
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Este es un mensaje muy largo que no cabría en RSA normal. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "publicKey": "{{rsa_public_key}}"
+}
+
+> {%
+    client.global.set("hybrid_encrypted_data", response.body.encryptedData);
+    client.global.set("hybrid_encrypted_key", response.body.encryptedKey);
+    client.global.set("hybrid_iv", response.body.iv);
+%}
+
+### 20. Desencriptar mensaje híbrido
+POST {{host}}/api/asymmetric/decrypt-hybrid
+Content-Type: {{contentType}}
+
+{
+  "encryptedData": "{{hybrid_encrypted_data}}",
+  "encryptedKey": "{{hybrid_encrypted_key}}",
+  "iv": "{{hybrid_iv}}",
+  "privateKey": "{{rsa_private_key}}"
+}
+
+#########################################
+### PRUEBAS DE ERROR
+#########################################
+
+### 21. Error: Modo de encriptación no válido
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Test",
+  "mode": "INVALID_MODE"
+}
+
+### 22. Error: Clave incorrecta para desencriptación
+POST {{host}}/api/symmetric/decrypt
+Content-Type: {{contentType}}
+
+{
+  "encryptedText": "{{aes_encrypted}}",
+  "key": "dGVzdGtleWludmFsaWQ=",
+  "mode": "GCM"
+}
+
+### 23. Error: Texto demasiado largo para RSA normal
+POST {{host}}/api/asymmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "Este texto es muy largo y excederá el límite de RSA. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  "publicKey": "{{rsa_public_key}}",
+  "padding": "OAEP"
+}
+
+#########################################
+### COMPARACIÓN DE MODOS AES
+#########################################
+
+### 24. Comparar mismo texto con diferentes modos
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "TEXTO_REPETIDO",
+  "mode": "ECB",
+  "key": "{{aes_key}}"
+}
+
+### 25. Mismo texto con ECB otra vez (¡debería dar el mismo resultado!)
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "TEXTO_REPETIDO",
+  "mode": "ECB",
+  "key": "{{aes_key}}"
+}
+
+### 26. Mismo texto con GCM (debería dar resultado diferente)
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "TEXTO_REPETIDO",
+  "mode": "GCM",
+  "key": "{{aes_key}}"
+}
+
+### 27. Mismo texto con GCM otra vez (resultado diferente por IV aleatorio)
+POST {{host}}/api/symmetric/encrypt
+Content-Type: {{contentType}}
+
+{
+  "plainText": "TEXTO_REPETIDO",
+  "mode": "GCM",
+  "key": "{{aes_key}}"
+}
+
