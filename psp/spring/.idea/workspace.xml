@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b9885cd-3c7f-48ca-8156-f8e952ecf93b" name="Changes" comment="registro interceptor">
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/SHARING_IMPLEMENTATION.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/SHARING_SECRETS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/api-tests-sharing.http" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/controller/SharingController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/RegisterPublicKeyRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/ShareSecretRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/ShareSecretResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/SharedSecretItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/UserPublicKeyResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/entity/SharedSecret.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/entity/UserPublicKey.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/repository/SharedSecretRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/repository/UserPublicKeyRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/service/SharingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SpringCrypto/CERTIFICATION_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SpringCrypto/KEY_CERTIFICATION.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/dto/CertifiedPublicKeyResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/entity/UserPublicKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SpringCrypto/src/main/java/org/example/springcrypto/entity/UserPublicKey.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../springSecutiry/springSecurity/src/main/java/org/example/springsecurity/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

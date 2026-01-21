@@ -31,6 +31,16 @@ public class UserPublicKey {
     @Column(name = "key_size")
     private Integer keySize; // 2048, 4096 para RSA; 256, 384 para EC
 
+    @Lob
+    @Column(name = "server_signature")
+    private byte[] serverSignature; // Firma del servidor sobre la clave pública
+
+    @Column(name = "signature_algorithm")
+    private String signatureAlgorithm; // "SHA256withRSA" o "SHA256withECDSA"
+
+    @Column(name = "signed_at")
+    private LocalDateTime signedAt; // Cuándo se firmó (para verificación)
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -88,6 +98,30 @@ public class UserPublicKey {
 
     public void setKeySize(Integer keySize) {
         this.keySize = keySize;
+    }
+
+    public byte[] getServerSignature() {
+        return serverSignature;
+    }
+
+    public void setServerSignature(byte[] serverSignature) {
+        this.serverSignature = serverSignature;
+    }
+
+    public String getSignatureAlgorithm() {
+        return signatureAlgorithm;
+    }
+
+    public void setSignatureAlgorithm(String signatureAlgorithm) {
+        this.signatureAlgorithm = signatureAlgorithm;
+    }
+
+    public LocalDateTime getSignedAt() {
+        return signedAt;
+    }
+
+    public void setSignedAt(LocalDateTime signedAt) {
+        this.signedAt = signedAt;
     }
 
     public LocalDateTime getCreatedAt() {
