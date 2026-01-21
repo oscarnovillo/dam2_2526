@@ -75,23 +75,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // URLs públicas (sin autenticación)
                 .requestMatchers("/", "/public", "/css/**", "/js/**").permitAll()
-                // Consola H2 (solo desarrollo)
-                .requestMatchers("/h2-console/**").permitAll()
-                // URLs protegidas (requieren autenticación)
-                .requestMatchers("/private", "/protected/**").authenticated()
                 // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             )
-            // Permitir frames para H2 Console (usa iframes)
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
-            // Deshabilitar CSRF para H2 Console
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
             .formLogin(form -> form
                 // Página de login personalizada
-                .loginPage("/login")
-                .defaultSuccessUrl("/private", true)
-                .permitAll()
-            )
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
                 .permitAll()

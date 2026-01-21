@@ -1,0 +1,345 @@
+### ========================================
+### COMPARTIR SECRETOS - API
+### ========================================
+###
+### Este archivo demuestra cómo compartir secretos entre usuarios
+### usando criptografía asimétrica (RSA/EC)
+###
+
+### Variables
+@baseUrl = http://localhost:8080/api/sharing
+@userA = 1
+@userB = 2
+
+### ========================================
+### PASO 1: Registrar Claves Públicas
+### ========================================
+###
+### Cada usuario debe generar un par de claves (RSA/EC) y registrar
+### su clave PÚBLICA en el servidor.
+### La clave PRIVADA nunca se envía al servidor.
+###
+### JavaScript (generar par RSA):
+### const keyPair = await crypto.subtle.generateKey(
+###   {
+###     name: "RSA-OAEP",
+###     modulusLength: 2048,
+###     publicExponent: new Uint8Array([1, 0, 1]),
+###     hash: "SHA-256"
+###   },
+###   true,
+###   ["encrypt", "decrypt"]
+### );
+###
+### const publicKeyExported = await crypto.subtle.exportKey("spki", keyPair.publicKey);
+### const publicKeyBase64 = btoa(String.fromCharCode(...new Uint8Array(publicKeyExported)));
+###
+
+### Usuario A registra su clave pública
+POST {{baseUrl}}/public-key
+Content-Type: application/json
+X-User-Id: {{userA}}
+
+{
+  "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...",
+  "algorithm": "RSA",
+  "keySize": 2048
+}
+
+###
+
+### Usuario B registra su clave pública
+POST {{baseUrl}}/public-key
+Content-Type: application/json
+X-User-Id: {{userB}}
+
+{
+  "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...",
+  "algorithm": "RSA",
+  "keySize": 2048
+}
+
+### ========================================
+### PASO 2: Obtener Clave Pública de Otro Usuario
+### ========================================
+###
+### Usuario A quiere compartir con Usuario B, necesita su clave pública
+###
+
+GET {{baseUrl}}/public-key/{{userB}}
+
+### Respuesta esperada:
+### {
+###   "userId": 2,
+###   "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...",
+###   "algorithm": "RSA",
+###   "keySize": 2048
+### }
+
+### ========================================
+### PASO 3: Compartir Secreto
+### ========================================
+###
+### Flujo en el CLIENTE:
+### 1. Usuario A descifra su secreto con su password (AES)
+### 2. Usuario A obtiene la clave pública de Usuario B (paso anterior)
+### 3. Usuario A cifra el secreto con la clave pública de B (RSA)
+###
+### JavaScript (cifrar con RSA):
+### const encrypted = await crypto.subtle.encrypt(
+###   {
+###     name: "RSA-OAEP"
+###   },
+###   publicKeyB, // Importada desde el Base64 del servidor
+###   encoder.encode(secretData)
+### );
+###
+### const encryptedBase64 = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+###
+
+### Usuario A comparte secreto #1 con Usuario B
+POST {{baseUrl}}/share
+Content-Type: application/json
+X-User-Id: {{userA}}
+
+{
+  "secretId": 1,
+  "sharedWithUserId": 2,
+  "encryptedData": "dGVzdCBlbmNyeXB0ZWQgZGF0YSB3aXRoIFJTQQ==",
+  "permission": "READ",
+  "algorithm": "RSA",
+  "expiresInDays": 30
+}
+
+### Respuesta esperada:
+### {
+###   "shareId": 1,
+###   "secretId": 1,
+###   "sharedWithUserId": 2,
+###   "permission": "READ",
+###   "createdAt": "2026-01-21T12:00:00",
+###   "expiresAt": "2026-02-20T12:00:00"
+### }
+
+###
+
+### Compartir con permiso de escritura
+POST {{baseUrl}}/share
+Content-Type: application/json
+X-User-Id: {{userA}}
+
+{
+  "secretId": 2,
+  "sharedWithUserId": 2,
+  "encryptedData": "YW5vdGhlciBlbmNyeXB0ZWQgc2VjcmV0",
+  "permission": "READ_WRITE",
+  "algorithm": "RSA",
+  "expiresInDays": null
+}
+
+### ========================================
+### PASO 4: Ver Secretos Compartidos Conmigo
+### ========================================
+###
+### Usuario B consulta qué secretos han compartido con él
+###
+
+GET {{baseUrl}}/shared-with-me
+X-User-Id: {{userB}}
+
+### Respuesta esperada:
+### [
+###   {
+###     "shareId": 1,
+###     "secretId": 1,
+###     "ownerId": 1,
+###     "sharedWithId": 2,
+###     "encryptedData": "dGVzdCBlbmNyeXB0ZWQgZGF0YSB3aXRoIFJTQQ==",
+###     "permission": "READ",
+###     "algorithm": "RSA",
+###     "createdAt": "2026-01-21T12:00:00",
+###     "expiresAt": "2026-02-20T12:00:00",
+###     "isExpired": false
+###   }
+### ]
+
+### ========================================
+### PASO 5: Acceder a un Secreto Compartido
+### ========================================
+###
+### Usuario B obtiene un secreto específico para descifrarlo
+###
+
+GET {{baseUrl}}/shares/1
+X-User-Id: {{userB}}
+
+### Respuesta: Mismo formato que shared-with-me
+###
+### Usuario B descifra en el CLIENTE con su clave privada:
+###
+### const decrypted = await crypto.subtle.decrypt(
+###   {
+###     name: "RSA-OAEP"
+###   },
+###   privateKeyB, // Nunca salió del dispositivo
+###   ciphertextBytes
+### );
+###
+### const secretData = new TextDecoder().decode(decrypted);
+
+### ========================================
+### PASO 6: Ver Secretos que He Compartido
+### ========================================
+###
+### Usuario A consulta con quién ha compartido
+###
+
+GET {{baseUrl}}/shared-by-me
+X-User-Id: {{userA}}
+
+### ========================================
+### PASO 7: Ver Con Quién He Compartido un Secreto
+### ========================================
+###
+### Usuario A lista todas las personas con acceso al secreto #1
+###
+
+GET {{baseUrl}}/secret/1/shares
+X-User-Id: {{userA}}
+
+### Respuesta esperada:
+### [
+###   {
+###     "shareId": 1,
+###     "secretId": 1,
+###     "ownerId": 1,
+###     "sharedWithId": 2,
+###     "permission": "READ",
+###     ...
+###   }
+### ]
+
+### ========================================
+### PASO 8: Revocar Acceso
+### ========================================
+###
+### Usuario A revoca el acceso de Usuario B al secreto #1
+###
+
+DELETE {{baseUrl}}/revoke/1/2
+X-User-Id: {{userA}}
+
+### Respuesta: 204 No Content
+###
+### Ahora Usuario B ya NO puede acceder al secreto #1
+
+### ========================================
+### FLUJO COMPLETO DE EJEMPLO
+### ========================================
+
+### 1. Usuario A crea secreto (vault normal)
+POST http://localhost:8080/api/vault/secrets
+Content-Type: application/json
+X-User-Id: 1
+
+{
+  "encryptedData": "QUVTIGVuY3J5cHRlZCBzZWNyZXQ=",
+  "iv": "MTIzNDU2Nzg5MDEy",
+  "salt": "c2FsdDEyMzQ1Njc4",
+  "metadata": null
+}
+
+### Guarda el secretId (ej: 1)
+
+###
+
+### 2. Usuario A registra clave pública
+POST {{baseUrl}}/public-key
+Content-Type: application/json
+X-User-Id: 1
+
+{
+  "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuserA",
+  "algorithm": "RSA",
+  "keySize": 2048
+}
+
+###
+
+### 3. Usuario B registra clave pública
+POST {{baseUrl}}/public-key
+Content-Type: application/json
+X-User-Id: 2
+
+{
+  "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuserB",
+  "algorithm": "RSA",
+  "keySize": 2048
+}
+
+###
+
+### 4. Usuario A obtiene clave pública de B
+GET {{baseUrl}}/public-key/2
+
+###
+
+### 5. Usuario A comparte secreto #1 con B
+### (después de cifrarlo con la clave pública de B)
+POST {{baseUrl}}/share
+Content-Type: application/json
+X-User-Id: 1
+
+{
+  "secretId": 1,
+  "sharedWithUserId": 2,
+  "encryptedData": "c2VjcmV0IGVuY3J5cHRlZCB3aXRoIHVzZXJCIHB1YmxpYyBrZXk=",
+  "permission": "READ",
+  "algorithm": "RSA",
+  "expiresInDays": 7
+}
+
+###
+
+### 6. Usuario B consulta secretos compartidos
+GET {{baseUrl}}/shared-with-me
+X-User-Id: 2
+
+###
+
+### 7. Usuario B accede al secreto y lo descifra con su clave privada
+GET {{baseUrl}}/shares/1
+X-User-Id: 2
+
+###
+
+### 8. Usuario A revoca acceso de B (opcional)
+DELETE {{baseUrl}}/revoke/1/2
+X-User-Id: 1
+
+### ========================================
+### NOTAS DE SEGURIDAD
+### ========================================
+###
+### ✅ Buenas Prácticas:
+### - La clave privada NUNCA se envía al servidor
+### - La clave privada se guarda en:
+###   - Web: IndexedDB (encriptada) o Session Storage
+###   - Android: Android Keystore
+###   - iOS: iOS Keychain
+### - Usar RSA-OAEP (no PKCS#1 v1.5)
+### - Usar EC (P-256) en vez de RSA si es posible (más eficiente)
+### - Implementar expiración de compartidos
+### - Logs de auditoría (quién compartió qué con quién)
+###
+### ⚠️ Limitaciones:
+### - El servidor ve QUIÉN comparte con QUIÉN (metadatos)
+### - No ve el CONTENIDO del secreto
+### - Si se revoca acceso, el usuario puede haber copiado el secreto
+### - Para máxima seguridad: usar claves efímeras por compartido
+###
+### 🔒 Privacidad:
+### - Zero-Knowledge para el CONTENIDO
+### - Metadata visible (quién, cuándo, con quién)
+### - Similar a Signal: servidor ve metadatos, no contenido
+
