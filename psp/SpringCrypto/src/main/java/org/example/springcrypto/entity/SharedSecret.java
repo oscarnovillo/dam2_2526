@@ -1,130 +1,129 @@
 package org.example.springcrypto.entity;
-}
-    }
-        this.expiresAt = expiresAt;
-    public void setExpiresAt(LocalDateTime expiresAt) {
 
-    }
-        return expiresAt;
-    public LocalDateTime getExpiresAt() {
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-    }
-        this.createdAt = createdAt;
-    public void setCreatedAt(LocalDateTime createdAt) {
+/**
+ * Representa un secreto compartido entre usuarios
+ *
+ * Flujo:
+ * 1. Usuario A (owner) cifra secreto con su password (AES)
+ * 2. Usuario A comparte con Usuario B:
+ *    - A descifra con su password
+ *    - A obtiene publicKey de B
+ *    - A cifra con publicKey de B (RSA/EC)
+ *    - Se guarda en esta tabla
+ * 3. Usuario B descifra con su privateKey
+ */
+@Entity
+@Table(name = "shared_secrets")
+public class SharedSecret {
 
-    }
-        return createdAt;
-    public LocalDateTime getCreatedAt() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    }
-        this.permission = permission;
-    public void setPermission(String permission) {
+    @Column(name = "secret_id", nullable = false)
+    private Long secretId; // Referencia al secreto original
 
-    }
-        return permission;
-    public String getPermission() {
+    @Column(name = "owner_id", nullable = false)
+    private Long ownerId; // Usuario que comparte
 
-    }
-        this.algorithm = algorithm;
-    public void setAlgorithm(String algorithm) {
+    @Column(name = "shared_with_id", nullable = false)
+    private Long sharedWithId; // Usuario con quien se comparte
 
-    }
-        return algorithm;
-    public String getAlgorithm() {
+    @Lob
+    @Column(name = "encrypted_secret_key", nullable = false)
+    private byte[] encryptedSecretKey; // Secreto cifrado con publicKey del receptor
 
-    }
-        this.encryptedSecretKey = encryptedSecretKey;
-    public void setEncryptedSecretKey(byte[] encryptedSecretKey) {
+    @Column(name = "algorithm", nullable = false)
+    private String algorithm; // "RSA" o "EC"
 
-    }
-        return encryptedSecretKey;
-    public byte[] getEncryptedSecretKey() {
+    @Column(name = "permission", nullable = false)
+    private String permission; // "READ" o "READ_WRITE"
 
-    }
-        this.sharedWithId = sharedWithId;
-    public void setSharedWithId(Long sharedWithId) {
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    }
-        return sharedWithId;
-    public Long getSharedWithId() {
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt; // Opcional: compartir por tiempo limitado
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
-        this.ownerId = ownerId;
-    public void setOwnerId(Long ownerId) {
-
-    }
-        return ownerId;
-    public Long getOwnerId() {
-
-    }
-        this.secretId = secretId;
-    public void setSecretId(Long secretId) {
-
-    }
-        return secretId;
-    public Long getSecretId() {
-
-    }
-        this.id = id;
-    public void setId(Long id) {
-
-    }
-        return id;
-    public Long getId() {
 
     // Getters y Setters
 
+    public Long getId() {
+        return id;
     }
-        createdAt = LocalDateTime.now();
-    protected void onCreate() {
-    @PrePersist
 
-    private LocalDateTime expiresAt; // Opcional: compartir por tiempo limitado
-    @Column(name = "expires_at")
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    private LocalDateTime createdAt;
-    @Column(name = "created_at", nullable = false, updatable = false)
+    public Long getSecretId() {
+        return secretId;
+    }
 
-    private String permission; // "READ" o "READ_WRITE"
-    @Column(name = "permission", nullable = false)
+    public void setSecretId(Long secretId) {
+        this.secretId = secretId;
+    }
 
-    private String algorithm; // "RSA" o "EC"
-    @Column(name = "algorithm", nullable = false)
+    public Long getOwnerId() {
+        return ownerId;
+    }
 
-    private byte[] encryptedSecretKey; // Secreto cifrado con publicKey del receptor
-    @Column(name = "encrypted_secret_key", nullable = false)
-    @Lob
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 
-    private Long sharedWithId; // Usuario con quien se comparte
-    @Column(name = "shared_with_id", nullable = false)
+    public Long getSharedWithId() {
+        return sharedWithId;
+    }
 
-    private Long ownerId; // Usuario que comparte
-    @Column(name = "owner_id", nullable = false)
+    public void setSharedWithId(Long sharedWithId) {
+        this.sharedWithId = sharedWithId;
+    }
 
-    private Long secretId; // Referencia al secreto original
-    @Column(name = "secret_id", nullable = false)
+    public byte[] getEncryptedSecretKey() {
+        return encryptedSecretKey;
+    }
 
-    private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
+    public void setEncryptedSecretKey(byte[] encryptedSecretKey) {
+        this.encryptedSecretKey = encryptedSecretKey;
+    }
 
-public class SharedSecret {
-@Table(name = "shared_secrets")
-@Entity
- */
- * 3. Usuario B descifra con su privateKey
- *    - Se guarda en esta tabla
- *    - A cifra con publicKey de B (RSA/EC)
- *    - A obtiene publicKey de B
- *    - A descifra con su password
- * 2. Usuario A comparte con Usuario B:
- * 1. Usuario A (owner) cifra secreto con su password (AES)
- * Flujo:
- *
- * Representa un secreto compartido entre usuarios
-/**
+    public String getAlgorithm() {
+        return algorithm;
+    }
 
-import java.time.LocalDateTime;
-import jakarta.persistence.*;
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
 
+    public String getPermission() {
+        return permission;
+    }
 
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(LocalDateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+}
