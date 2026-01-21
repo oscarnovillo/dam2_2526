@@ -1,113 +1,113 @@
 package org.example.springcrypto.entity;
-}
-    }
-        this.updatedAt = updatedAt;
-    public void setUpdatedAt(LocalDateTime updatedAt) {
 
-    }
-        return updatedAt;
-    public LocalDateTime getUpdatedAt() {
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-    }
-        this.createdAt = createdAt;
-    public void setCreatedAt(LocalDateTime createdAt) {
+@Entity
+@Table(name = "vault_secrets")
+public class VaultSecret {
 
-    }
-        return createdAt;
-    public LocalDateTime getCreatedAt() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    }
-        this.metadata = metadata;
-    public void setMetadata(String metadata) {
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    }
-        return metadata;
-    public String getMetadata() {
+    @Lob
+    @Column(name = "encrypted_data", nullable = false)
+    private byte[] encryptedData;
 
-    }
-        this.salt = salt;
-    public void setSalt(byte[] salt) {
+    @Column(name = "iv", nullable = false)
+    private byte[] iv;
 
-    }
-        return salt;
-    public byte[] getSalt() {
+    @Column(name = "salt", nullable = false)
+    private byte[] salt;
 
-    }
-        this.iv = iv;
-    public void setIv(byte[] iv) {
+    @Column(name = "metadata")
+    private String metadata; // JSON con título, tags, etc. (también cifrado)
 
-    }
-        return iv;
-    public byte[] getIv() {
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    }
-        this.encryptedData = encryptedData;
-    public void setEncryptedData(byte[] encryptedData) {
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
-        return encryptedData;
-    public byte[] getEncryptedData() {
 
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
-        this.userId = userId;
-    public void setUserId(Long userId) {
-
-    }
-        return userId;
-    public Long getUserId() {
-
-    }
-        this.id = id;
-    public void setId(Long id) {
-
-    }
-        return id;
-    public Long getId() {
 
     // Getters y Setters
 
+    public Long getId() {
+        return id;
     }
-        updatedAt = LocalDateTime.now();
-    protected void onUpdate() {
-    @PreUpdate
 
+    public void setId(Long id) {
+        this.id = id;
     }
-        updatedAt = LocalDateTime.now();
-        createdAt = LocalDateTime.now();
-    protected void onCreate() {
-    @PrePersist
 
-    private LocalDateTime updatedAt;
-    @Column(name = "updated_at")
+    public Long getUserId() {
+        return userId;
+    }
 
-    private LocalDateTime createdAt;
-    @Column(name = "created_at", nullable = false, updatable = false)
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    private String metadata; // JSON con título, tags, etc. (también cifrado)
-    @Column(name = "metadata")
+    public byte[] getEncryptedData() {
+        return encryptedData;
+    }
 
-    private byte[] salt;
-    @Column(name = "salt", nullable = false)
+    public void setEncryptedData(byte[] encryptedData) {
+        this.encryptedData = encryptedData;
+    }
 
-    private byte[] iv;
-    @Column(name = "iv", nullable = false)
+    public byte[] getIv() {
+        return iv;
+    }
 
-    private byte[] encryptedData;
-    @Column(name = "encrypted_data", nullable = false)
-    @Lob
+    public void setIv(byte[] iv) {
+        this.iv = iv;
+    }
 
-    private Long userId;
-    @Column(name = "user_id", nullable = false)
+    public byte[] getSalt() {
+        return salt;
+    }
 
-    private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 
-public class VaultSecret {
-@Table(name = "vault_secrets")
-@Entity
+    public String getMetadata() {
+        return metadata;
+    }
 
-import java.time.LocalDateTime;
-import jakarta.persistence.*;
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}
 
