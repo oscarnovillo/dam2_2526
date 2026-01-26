@@ -55,13 +55,37 @@ Aplicación Spring Boot que demuestra diversos conceptos de criptografía aplica
    - Claves estáticas vs efímeras
    - Perfect Forward Secrecy
 
+7. **[ECIES_QUICKSTART.md](ECIES_QUICKSTART.md)** ⭐ NUEVO
+   - Guía rápida de ECIES
+   - Cómo generar claves EC
+   - Cifrar y descifrar con ECIES
+   - Ejemplos paso a paso
+   - Comparación con RSA
+
+8. **[ECIES_EXPLAINED.md](ECIES_EXPLAINED.md)** ⭐ NUEVO
+   - ¿Qué es ECIES? (Elliptic Curve Integrated Encryption Scheme)
+   - Matemáticas detrás de ECIES
+   - ECDH + KDF + AES-GCM
+   - Forward Secrecy con claves efímeras
+   - Seguridad y mejores prácticas
+   - Comparación con RSA-OAEP y RSA híbrido
+   - ⚠️ Datos efímeros vs persistentes
+
+9. **[SHARING_PERSISTENT_SECRETS.md](SHARING_PERSISTENT_SECRETS.md)** ⭐ NUEVO
+   - Compartir secretos con múltiples usuarios
+   - RSA Híbrido vs ECIES Puro vs ECIES Híbrido
+   - Comparación detallada (almacenamiento, seguridad, rendimiento)
+   - ¿Por qué Forward Secrecy es imposible con datos persistentes?
+   - Esquema de base de datos recomendado
+   - Casos de uso: PGP, Signal, Google Drive
+
 ---
 
 ## 🏗️ Arquitecturas y Casos de Uso
 
 ### 🔐 Vault - Caja Fuerte Zero-Knowledge
 
-7. **[SECURE_VAULT_ARCHITECTURE.md](SECURE_VAULT_ARCHITECTURE.md)** ⭐
+10. **[SECURE_VAULT_ARCHITECTURE.md](SECURE_VAULT_ARCHITECTURE.md)** ⭐
    - **3 opciones de arquitectura**:
      - Opción 1: Cifrado en Cliente (Zero-Knowledge) ✅ Implementada
      - Opción 2: Cifrado en Servidor
@@ -70,14 +94,14 @@ Aplicación Spring Boot que demuestra diversos conceptos de criptografía aplica
    - Flujos completos (registro, login, guardar, recuperar)
    - Mejoras opcionales (biometría, compartir secretos, recovery key)
 
-8. **[VAULT_README.md](VAULT_README.md)**
+11. **[VAULT_README.md](VAULT_README.md)**
    - Guía de inicio rápido
    - API REST completa
    - Parámetros criptográficos
    - Seguridad y limitaciones
    - Pruebas y verificación
 
-9. **[IMPLEMENTACION_VAULT.md](IMPLEMENTACION_VAULT.md)**
+12. **[IMPLEMENTACION_VAULT.md](IMPLEMENTACION_VAULT.md)**
    - Resumen de implementación
    - Archivos creados
    - Cómo probar
@@ -103,7 +127,9 @@ http://localhost:8080/vault-demo.html
 
 Abrir en IntelliJ IDEA:
 - `api-tests.http` - Cifrado simétrico/asimétrico
+- `api-tests-ecies.http` - Ejemplos de ECIES (Elliptic Curve) ⭐ NUEVO
 - `api-tests-vault.http` - Caja fuerte zero-knowledge
+- `api-tests-sharing.http` - Compartir secretos entre usuarios
 
 ---
 
@@ -142,12 +168,16 @@ SpringCrypto/
 │   ├── RSA_ECB_CLARIFICATION.md
 │   ├── ELLIPTIC_CURVES.md
 │   ├── ECDH_AES_KEYS.md
+│   ├── ECIES_QUICKSTART.md ⭐ NUEVO
+│   ├── ECIES_EXPLAINED.md ⭐ NUEVO
+│   ├── SHARING_PERSISTENT_SECRETS.md ⭐ NUEVO
 │   ├── SECURE_VAULT_ARCHITECTURE.md ⭐
 │   ├── VAULT_README.md ⭐
 │   ├── IMPLEMENTACION_VAULT.md ⭐
 │   └── INDEX.md (este archivo)
 │
 ├── api-tests.http
+├── api-tests-ecies.http ⭐ NUEVO
 ├── api-tests-vault.http ⭐
 ├── QUICKSTART.md
 └── pom.xml

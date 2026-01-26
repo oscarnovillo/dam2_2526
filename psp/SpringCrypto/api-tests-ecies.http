@@ -1,0 +1,190 @@
+### ECIES - Elliptic Curve Integrated Encryption Scheme
+### Ejemplos de cifrado con curvas elípticas
+
+### 1. Generar par de claves EC (Elliptic Curve)
+GET http://localhost:8080/api/asymmetric/generate-keypair?algorithm=EC
+Accept: application/json
+
+> {%
+    client.global.set("ecPublicKey", response.body.publicKey);
+    client.global.set("ecPrivateKey", response.body.privateKey);
+    client.log("EC Public Key: " + response.body.publicKey.substring(0, 50) + "...");
+    client.log("EC Private Key: " + response.body.privateKey.substring(0, 50) + "...");
+    client.log("Algorithm: " + response.body.algorithm);
+%}
+
+###
+
+### 2. Cifrar con ECIES (usar la clave pública EC generada arriba)
+POST http://localhost:8080/api/asymmetric/encrypt-ecies
+Content-Type: application/json
+
+{
+  "plainText": "Este es un mensaje secreto cifrado con ECIES (Elliptic Curve Integrated Encryption Scheme). ¡Muy seguro! 🔐",
+  "publicKey": "{{ecPublicKey}}"
+}
+
+> {%
+    client.global.set("eciesEphemeralPublicKey", response.body.ephemeralPublicKey);
+    client.global.set("eciesEncryptedData", response.body.encryptedData);
+    client.global.set("eciesIv", response.body.iv);
+    client.log("Ephemeral Public Key: " + response.body.ephemeralPublicKey.substring(0, 50) + "...");
+    client.log("Encrypted Data: " + response.body.encryptedData.substring(0, 50) + "...");
+    client.log("IV: " + response.body.iv);
+%}
+
+###
+
+### 3. Descifrar con ECIES (usar la clave privada EC y los datos cifrados)
+POST http://localhost:8080/api/asymmetric/decrypt-ecies
+Content-Type: application/json
+
+{
+  "privateKey": "{{ecPrivateKey}}",
+  "ephemeralPublicKey": "{{eciesEphemeralPublicKey}}",
+  "encryptedData": "{{eciesEncryptedData}}",
+  "iv": "{{eciesIv}}"
+}
+
+###
+
+### 4. Demo completo - Ver todos los algoritmos en acción
+GET http://localhost:8080/api/asymmetric/demo
+Accept: application/json
+
+###
+
+### ========================================
+### EJEMPLO MANUAL: Generar claves y cifrar paso a paso
+### ========================================
+
+### Paso 1: Generar claves EC
+GET http://localhost:8080/api/asymmetric/generate-keypair?algorithm=EC
+
+###
+
+### Paso 2: Cifrar mensaje con ECIES
+### (Copiar la clave pública del paso anterior)
+POST http://localhost:8080/api/asymmetric/encrypt-ecies
+Content-Type: application/json
+
+{
+  "plainText": "¡ECIES es genial! Combina ECDH para intercambio de claves con AES-GCM para cifrado. 🚀",
+  "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE..."
+}
+
+###
+
+### Paso 3: Descifrar mensaje con ECIES
+### (Copiar la clave privada del paso 1 y los datos cifrados del paso 2)
+POST http://localhost:8080/api/asymmetric/decrypt-ecies
+Content-Type: application/json
+
+{
+  "privateKey": "MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCA...",
+  "ephemeralPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE...",
+  "encryptedData": "...",
+  "iv": "..."
+}
+
+###
+
+### ========================================
+### COMPARACIÓN: RSA vs EC
+### ========================================
+
+### Generar claves RSA (2048 bits)
+GET http://localhost:8080/api/asymmetric/generate-keypair?algorithm=RSA
+
+> {%
+    client.log("RSA Public Key Length: " + response.body.publicKey.length + " chars");
+%}
+
+###
+
+### Generar claves EC (P-256, equivalente a RSA-3072 en seguridad)
+GET http://localhost:8080/api/asymmetric/generate-keypair?algorithm=EC
+
+> {%
+    client.log("EC Public Key Length: " + response.body.publicKey.length + " chars");
+    client.log("EC es más eficiente: claves más pequeñas con igual seguridad");
+%}
+
+###
+
+### ========================================
+### FIRMA DIGITAL CON EC (ECDSA)
+### ========================================
+
+### 1. Generar claves EC para firmas
+GET http://localhost:8080/api/asymmetric/generate-keypair?algorithm=EC
+
+> {%
+    client.global.set("ecSignPublicKey", response.body.publicKey);
+    client.global.set("ecSignPrivateKey", response.body.privateKey);
+%}
+
+###
+
+### 2. Firmar mensaje con ECDSA
+POST http://localhost:8080/api/asymmetric/sign
+Content-Type: application/json
+
+{
+  "message": "Documento importante que necesita ser firmado digitalmente",
+  "privateKey": "{{ecSignPrivateKey}}"
+}
+
+> {%
+    client.global.set("ecdsaSignature", response.body.signature);
+    client.log("ECDSA Signature: " + response.body.signature);
+%}
+
+###
+
+### 3. Verificar firma ECDSA
+POST http://localhost:8080/api/asymmetric/verify
+Content-Type: application/json
+
+{
+  "message": "Documento importante que necesita ser firmado digitalmente",
+  "signature": "{{ecdsaSignature}}",
+  "publicKey": "{{ecSignPublicKey}}"
+}
+
+###
+
+### ========================================
+### CIFRADO DE MENSAJES LARGOS CON ECIES
+### ========================================
+
+### ECIES puede cifrar mensajes de cualquier longitud (a diferencia de RSA puro)
+POST http://localhost:8080/api/asymmetric/encrypt-ecies
+Content-Type: application/json
+
+{
+  "plainText": "Este es un mensaje muy largo que RSA puro no podría cifrar directamente porque excede el límite de tamaño. ECIES combina ECDH (Elliptic Curve Diffie-Hellman) para generar una clave compartida, deriva una clave AES usando KDF (Key Derivation Function), y luego cifra el mensaje con AES-GCM. Esto permite cifrar mensajes de cualquier tamaño de forma segura y eficiente. La clave pública efímera generada durante el cifrado se incluye en el resultado para que el receptor pueda descifrar el mensaje usando su clave privada. ¡Es un esquema de cifrado híbrido muy elegante! 🎯",
+  "publicKey": "{{ecPublicKey}}"
+}
+
+> {%
+    client.global.set("longEciesEphemeralKey", response.body.ephemeralPublicKey);
+    client.global.set("longEciesEncryptedData", response.body.encryptedData);
+    client.global.set("longEciesIv", response.body.iv);
+%}
+
+###
+
+### Descifrar mensaje largo
+POST http://localhost:8080/api/asymmetric/decrypt-ecies
+Content-Type: application/json
+
+{
+  "privateKey": "{{ecPrivateKey}}",
+  "ephemeralPublicKey": "{{longEciesEphemeralKey}}",
+  "encryptedData": "{{longEciesEncryptedData}}",
+  "iv": "{{longEciesIv}}"
+}
+
+###
+

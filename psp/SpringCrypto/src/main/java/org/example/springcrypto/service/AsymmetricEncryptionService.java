@@ -256,8 +256,94 @@ public class AsymmetricEncryptionService {
     }
 
     /**
+     * ECIES - Elliptic Curve Integrated Encryption Scheme
+     * Cifrado con curvas elípticas usando ECDH + AES-GCM
+     *
+     * Proceso:
+     * 1. Genera un par de claves efímero EC
+     * 2. Usa ECDH para derivar clave compartida
+     * 3. Deriva clave AES de la clave compartida (KDF)
+     * 4. Cifra datos con AES-GCM
+     * 5. Devuelve: clave pública efímera + datos cifrados + IV
+     */
+    public ECIESResult encryptECIES(String plainText, PublicKey recipientPublicKey) throws Exception {
+        // Verificar que sea una clave EC
+        if (!recipientPublicKey.getAlgorithm().equals("EC")) {
+            throw new IllegalArgumentException("ECIES requiere una clave pública EC");
+        }
+
+        // 1. Generar par de claves efímero
+        KeyPair ephemeralKeyPair = generateKeyPair("EC");
+
+        // 2. Realizar ECDH para obtener secreto compartido
+        javax.crypto.KeyAgreement keyAgreement = javax.crypto.KeyAgreement.getInstance("ECDH");
+        keyAgreement.init(ephemeralKeyPair.getPrivate());
+        keyAgreement.doPhase(recipientPublicKey, true);
+        byte[] sharedSecret = keyAgreement.generateSecret();
+
+        // 3. Derivar clave AES del secreto compartido usando KDF (HKDF simplificado con SHA-256)
+        java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+        byte[] aesKeyBytes = digest.digest(sharedSecret);
+        Key aesKey = new javax.crypto.spec.SecretKeySpec(aesKeyBytes, "AES");
+
+        // 4. Cifrar con AES-GCM
+        Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
+        byte[] iv = new byte[12]; // GCM usa IV de 12 bytes
+        new SecureRandom().nextBytes(iv);
+        aesCipher.init(Cipher.ENCRYPT_MODE, aesKey, new javax.crypto.spec.GCMParameterSpec(128, iv));
+        byte[] encryptedData = aesCipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+
+        // 5. Devolver clave pública efímera + datos cifrados + IV
+        return new ECIESResult(
+                publicKeyToBase64(ephemeralKeyPair.getPublic()),
+                Base64.getEncoder().encodeToString(encryptedData),
+                Base64.getEncoder().encodeToString(iv)
+        );
+    }
+
+    /**
+     * Descifra datos cifrados con ECIES
+     */
+    public String decryptECIES(ECIESResult eciesResult, PrivateKey recipientPrivateKey) throws Exception {
+        // Verificar que sea una clave EC
+        if (!recipientPrivateKey.getAlgorithm().equals("EC")) {
+            throw new IllegalArgumentException("ECIES requiere una clave privada EC");
+        }
+
+        // 1. Recuperar clave pública efímera
+        PublicKey ephemeralPublicKey = base64ToPublicKey(eciesResult.ephemeralPublicKey());
+
+        // 2. Realizar ECDH con nuestra clave privada y la clave pública efímera
+        javax.crypto.KeyAgreement keyAgreement = javax.crypto.KeyAgreement.getInstance("ECDH");
+        keyAgreement.init(recipientPrivateKey);
+        keyAgreement.doPhase(ephemeralPublicKey, true);
+        byte[] sharedSecret = keyAgreement.generateSecret();
+
+        // 3. Derivar la misma clave AES
+        java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+        byte[] aesKeyBytes = digest.digest(sharedSecret);
+        Key aesKey = new javax.crypto.spec.SecretKeySpec(aesKeyBytes, "AES");
+
+        // 4. Descifrar con AES-GCM
+        Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
+        byte[] iv = Base64.getDecoder().decode(eciesResult.iv());
+        aesCipher.init(Cipher.DECRYPT_MODE, aesKey, new javax.crypto.spec.GCMParameterSpec(128, iv));
+        byte[] decryptedData = aesCipher.doFinal(Base64.getDecoder().decode(eciesResult.encryptedData()));
+
+        return new String(decryptedData, StandardCharsets.UTF_8);
+    }
+
+    /**
      * Record para almacenar resultado de encriptación híbrida
      */
     public record HybridEncryptionResult(String encryptedData, String encryptedKey, String iv) {}
+
+    /**
+     * Record para almacenar resultado de ECIES
+     * ephemeralPublicKey: Clave pública efímera generada para este cifrado
+     * encryptedData: Datos cifrados con AES-GCM
+     * iv: Vector de inicialización para AES-GCM
+     */
+    public record ECIESResult(String ephemeralPublicKey, String encryptedData, String iv) {}
 }
 

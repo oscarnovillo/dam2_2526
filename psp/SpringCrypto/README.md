@@ -16,6 +16,11 @@ Aplicación Spring Boot que demuestra diversos conceptos de criptografía aplica
   - Generación de pares de claves EC (P-256, P-384, P-521)
   - Cifrado/descifrado RSA con OAEP y PKCS#1
   - ECDH para acuerdo de claves
+  - **ECIES (Elliptic Curve Integrated Encryption Scheme)** ⭐ NUEVO
+    - Cifrado híbrido con curvas elípticas
+    - ECDH + AES-GCM
+    - Forward Secrecy con claves efímeras
+    - Sin límite de tamaño de mensaje
 
 - **Firmas Digitales**
   - RSA (SHA256withRSA)
@@ -100,6 +105,9 @@ Consulta **[INDEX.md](INDEX.md)** para el índice completo de documentación.
 |-----------|-------------|
 | **[CRIPTOGRAFIA.md](CRIPTOGRAFIA.md)** | Teoría completa de criptografía |
 | **[ECDH_AES_KEYS.md](ECDH_AES_KEYS.md)** | ECDH, TLS 1.3, certificados ECDSA vs RSA |
+| **[ECIES_QUICKSTART.md](ECIES_QUICKSTART.md)** | ⭐ Guía rápida de ECIES (Elliptic Curve Encryption) |
+| **[ECIES_EXPLAINED.md](ECIES_EXPLAINED.md)** | ⭐ Explicación técnica detallada de ECIES |
+| **[ELLIPTIC_CURVES.md](ELLIPTIC_CURVES.md)** | Teoría de curvas elípticas |
 | **[SECURE_VAULT_ARCHITECTURE.md](SECURE_VAULT_ARCHITECTURE.md)** | 3 arquitecturas de caja fuerte |
 | **[VAULT_README.md](VAULT_README.md)** | Guía completa del Vault |
 | **[VaultCryptoManager.kt](VaultCryptoManager.kt)** | Cliente Android ejemplo |
@@ -147,11 +155,17 @@ POST /api/symmetric/decrypt
 ### Cifrado Asimétrico
 
 ```http
-GET  /api/asymmetric/keypair?algorithm=RSA&keySize=2048
-POST /api/asymmetric/encrypt
-POST /api/asymmetric/decrypt
-POST /api/asymmetric/sign
-POST /api/asymmetric/verify
+GET  /api/asymmetric/generate-keypair?algorithm=RSA  # Generar RSA
+GET  /api/asymmetric/generate-keypair?algorithm=EC   # Generar EC
+POST /api/asymmetric/encrypt                         # Cifrar RSA
+POST /api/asymmetric/decrypt                         # Descifrar RSA
+POST /api/asymmetric/encrypt-ecies                   # Cifrar ECIES (EC) ⭐
+POST /api/asymmetric/decrypt-ecies                   # Descifrar ECIES (EC) ⭐
+POST /api/asymmetric/encrypt-hybrid                  # RSA + AES híbrido
+POST /api/asymmetric/decrypt-hybrid                  # Descifrar híbrido
+POST /api/asymmetric/sign                            # Firmar
+POST /api/asymmetric/verify                          # Verificar firma
+GET  /api/asymmetric/demo                            # Demo completo
 ```
 
 ### Vault (Caja Fuerte)
